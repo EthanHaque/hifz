@@ -55,5 +55,5 @@ This will look for tests in the `tests` directory and execute them.
 The project uses `ruff` for linting and formatting code. You can manually run the linter to check and fix code quality issues by executing:
 
 ```bash
-ruff check --fix .
+uvx ruff check --fix .
 ```
