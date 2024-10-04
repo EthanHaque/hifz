@@ -1,12 +1,5 @@
-from dataclasses import dataclass
-
-from learning_strategies import FlashcardStrategy
-
-
-@dataclass
-class Card:
-    front: str
-    back: str
+from hifz.learning_strategies import FlashcardStrategy
+from hifz.models import Card
 
 
 class FlashcardSession:

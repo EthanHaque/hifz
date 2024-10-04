@@ -1,7 +1,7 @@
 import random
 from abc import ABC, abstractmethod
 
-from utils import Card
+from hifz.models import Card
 
 
 class FlashcardStrategy(ABC):
