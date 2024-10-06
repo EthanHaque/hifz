@@ -5,25 +5,23 @@ from hifz.models import Card
 
 
 class DataServer:
-    def __init__(self, file_name: str) -> None:
-        self.file_name = file_name
-        self._cards = self.__read_file()  # Read the file during initialization
+    def read_entries(self, file_path: str) -> list[Card]:
+        """Reads the entries associatied with the csv at file_path.
 
-    def __read_file(self) -> list[Card]:
-        """Private helper method to read the file and store the data."""
+        Args:
+            file_path (str): The file path of the csv.
+
+        Returns:
+            list[Card]: The list of cards.
+        """
         cards = []
 
         try:
-            with Path(self.file_name).open() as file:
-                csv_reader = csv.reader(file)
-                for row in csv_reader:
-                    cards.append(Card(*row))
+            with Path(file_path).open() as f:
+                entries = csv.DictReader(f)
+                cards = [Card(e["front"], e["back"]) for e in entries]
         except FileNotFoundError as err:
-            error_message = f"Error: The file '{self.file_name}' was not found."
+            error_message = f"Error: The file at path '{file_path}' was not found."
             raise FileNotFoundError(error_message) from err
 
         return cards
-
-    def get_cards(self) -> list[Card]:
-        """Returns the list of tuples."""
-        return self._cards
