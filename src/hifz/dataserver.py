@@ -18,9 +18,9 @@ class DataServer:
                 csv_reader = csv.reader(file)
                 for row in csv_reader:
                     cards.append(Card(*row))
-        except FileNotFoundError:
-            raise f"Error: The file '{
-                self.file_name}' was not found." from None
+        except FileNotFoundError as err:
+            error_message = f"Error: The file '{self.file_name}' was not found."
+            raise FileNotFoundError(error_message) from err
 
         return cards
 
