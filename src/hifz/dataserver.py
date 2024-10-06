@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 
-from utils import Card
+from hifz.models import Card
 
 
 class DataServer:
@@ -19,7 +19,8 @@ class DataServer:
                 for row in csv_reader:
                     cards.append(Card(*row))
         except FileNotFoundError:
-            raise f"Error: The file '{self.file_name}' was not found." from None
+            raise f"Error: The file '{
+                self.file_name}' was not found." from None
 
         return cards
 
