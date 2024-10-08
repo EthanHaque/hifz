@@ -1,35 +1,35 @@
 from hifz.learning_strategies import RandomStrategy, SequentialStrategy
 from hifz.models import Card
-from hifz.utils import FlashcardSession
+from hifz.utils import CardSession
 
 
-def test_random_strategy_returns_card(flashcards: list[Card]):
+def test_random_strategy_returns_card(cards: list[Card]):
     random_strategy = RandomStrategy()
-    session = FlashcardSession(flashcards, random_strategy)
-    card = session.next_flashcard()
-    assert card in flashcards
+    session = CardSession(cards, random_strategy)
+    card = session.next_card()
+    assert card in cards
 
 
-def test_sequential_strategy_returns_in_order(flashcards: list[Card]):
+def test_sequential_strategy_returns_in_order(cards: list[Card]):
     sequential_strategy = SequentialStrategy()
-    session = FlashcardSession(flashcards, sequential_strategy)
+    session = CardSession(cards, sequential_strategy)
 
-    card1 = session.next_flashcard()
-    card2 = session.next_flashcard()
-    card3 = session.next_flashcard()
+    card1 = session.next_card()
+    card2 = session.next_card()
+    card3 = session.next_card()
 
-    assert card1 == flashcards[0]
-    assert card2 == flashcards[1]
-    assert card3 == flashcards[2]
+    assert card1 == cards[0]
+    assert card2 == cards[1]
+    assert card3 == cards[2]
 
 
-def test_sequential_strategy_wraps_around(flashcards: list[Card]):
+def test_sequential_strategy_wraps_around(cards: list[Card]):
     sequential_strategy = SequentialStrategy()
-    session = FlashcardSession(flashcards, sequential_strategy)
+    session = CardSession(cards, sequential_strategy)
 
     # Loop through the list to force wrap-around
-    for _ in range(len(flashcards)):
-        session.next_flashcard()
+    for _ in range(len(cards)):
+        session.next_card()
 
-    card = session.next_flashcard()
-    assert card == flashcards[0], "SequentialStrategy did not wrap around."
+    card = session.next_card()
+    assert card == cards[0], "SequentialStrategy did not wrap around."

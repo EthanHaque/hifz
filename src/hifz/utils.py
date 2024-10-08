@@ -1,11 +1,11 @@
-from hifz.learning_strategies import FlashcardStrategy
+from hifz.learning_strategies import CardStrategy
 from hifz.models import Card
 
 
-class FlashcardSession:
-    def __init__(self, flashcards: list[Card], strategy: FlashcardStrategy):
-        self.flashcards = flashcards
+class CardSession:
+    def __init__(self, cards: list[Card], strategy: CardStrategy):
+        self.cards = cards
         self.strategy = strategy
 
-    def next_flashcard(self) -> Card:
-        return self.strategy.get_next_flashcard(self.flashcards)
+    def next_card(self) -> Card:
+        return self.strategy.get_next_card(self.cards)
