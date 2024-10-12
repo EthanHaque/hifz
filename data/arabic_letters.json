@@ -1,0 +1,118 @@
+[
+    {
+        "front": "ا",
+        "back": "alif (a as in bad or A as in fAther)"
+    },
+    {
+        "front": "ب",
+        "back": "baa'"
+    },
+    {
+        "front": "ت",
+        "back": "taa'"
+    },
+    {
+        "front": "ث",
+        "back": "thaa'"
+    },
+    {
+        "front": "ج",
+        "back": "jeem"
+    },
+    {
+        "front": "ح",
+        "back": "Haa'"
+    },
+    {
+        "front": "خ",
+        "back": "khAA' (like the ch in music composer bach)"
+    },
+    {
+        "front": "د",
+        "back": "daal"
+    },
+    {
+        "front": "ذ",
+        "back": "dhaal"
+    },
+    {
+        "front": "ر",
+        "back": "rAA"
+    },
+    {
+        "front": "ز",
+        "back": "zaee"
+    },
+    {
+        "front": "س",
+        "back": "seen"
+    },
+    {
+        "front": "ش",
+        "back": "sheen"
+    },
+    {
+        "front": "ص",
+        "back": "SAAd"
+    },
+    {
+        "front": "ض",
+        "back": "DAAd"
+    },
+    {
+        "front": "ط",
+        "back": "TAA"
+    },
+    {
+        "front": "ظ",
+        "back": "DhAA"
+    },
+    {
+        "front": "ع",
+        "back": "'ain"
+    },
+    {
+        "front": "غ",
+        "back": "ghain"
+    },
+    {
+        "front": "ف",
+        "back": "faa'"
+    },
+    {
+        "front": "ق",
+        "back": "qAAf"
+    },
+    {
+        "front": "ك",
+        "back": "kaaf"
+    },
+    {
+        "front": "ل",
+        "back": "laam"
+    },
+    {
+        "front": "م",
+        "back": "meem"
+    },
+    {
+        "front": "ن",
+        "back": "noon"
+    },
+    {
+        "front": "ه",
+        "back": "haa'"
+    },
+    {
+        "front": "و",
+        "back": "waaw"
+    },
+    {
+        "front": "ي",
+        "back": "yaa'"
+    },
+    {
+        "front": "ء",
+        "back": "hamza (glottal stop as in the - in uh-oh; we denote this as ')"
+    }
+]
