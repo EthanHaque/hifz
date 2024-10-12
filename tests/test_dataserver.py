@@ -9,7 +9,7 @@ def test_dataserver_returns_card_csv():
         f.writelines([
             "front,back",
             "ا,alif (a as in bad or A as in fAther)",
-            "ب,baa"
+            "ب,'baa"
             ])
     cards = server.read_entries(temp_file_path)
     Path(temp_file_path).unlink()
