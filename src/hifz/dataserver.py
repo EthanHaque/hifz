@@ -21,10 +21,9 @@ class DataServer:
             with Path(file_path).open() as f:
                 if file_path.lower.endswith(".csv"):
                     entries = csv.DictReader(f)
-                    cards = [Card(e["front"], e["back"]) for e in entries]
                 elif file_path.endswith(".json"):
                     entries = json.load(f)
-                    cards = [Card(e["front"], e["back"]) for e in entries]
+                cards = [Card(e["front"], e["back"]) for e in entries]
         except FileNotFoundError as err:
             error_message = f"Error: The file at path '{file_path}' was not found."
             raise FileNotFoundError(error_message) from err
