@@ -12,6 +12,7 @@ def test_dataserver_returns_card_csv(tmp_file):
     cards = server.read_entries(tmp_file_path)
     assert Card("ب", "baa'") in cards
 
+
 def test_dataserver_returns_card_json(tmp_file):
     server = DataServer()
     tmp_file_path = tmp_file / "test_arabic.json"
