@@ -18,7 +18,7 @@ class DataServer:
         cards = []
         types_accepted = [".csv", ".json"]
         try:
-            with Path(file_path).open() as f:
+            with Path(file_path).open(encoding="uft-8") as f:
                 try:
                     if file_path.lower.endswith(types_accepted[0]):
                         entries = csv.DictReader(f)
