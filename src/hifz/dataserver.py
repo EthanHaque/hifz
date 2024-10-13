@@ -24,10 +24,10 @@ class DataServer:
                         entries = csv.DictReader(f)
                     elif file_path.endswith(types_accepted[1]):
                         entries = json.load(f)
-                except IOError as err:
+                except OSError as err:
                     error_message = f"Error: The file type at path '{file_path}' is not supported.\
                     please use {",".join(types_accepted)}"
-                    raise IOError(error_message) from err                    
+                    raise OSError(error_message) from err
                 cards = [Card(e["front"], e["back"]) for e in entries]
         except FileNotFoundError as err:
             error_message = f"Error: The file at path '{file_path}' was not found."
