@@ -17,7 +17,7 @@ class DataServer:
         cards = []
 
         try:
-            with Path(file_path).open() as f:
+            with Path(file_path).open(encoding="utf-8") as f:
                 entries = csv.DictReader(f)
                 cards = [Card(e["front"], e["back"]) for e in entries]
         except FileNotFoundError as err:
