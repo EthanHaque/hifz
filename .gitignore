@@ -102,3 +102,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 .vscode/
+
+# DS_Store from Mac OS
+.DS_Store
+src/.DS_Store
