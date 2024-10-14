@@ -17,7 +17,7 @@ def test_dataserver_returns_card_csv(tmp_path_factory):
 
 
 @pytest.fixture(scope="session")
-def test_dataserver_returns_card_json(tmp_file):
+def test_dataserver_returns_card_json(tmp_path_factory):
     server = DataServer()
     tmp_file_path = tmp_path_factory.mktemp("test_arabic.json")
     with Path(tmp_file_path).open(encoding="uft-8") as f:
