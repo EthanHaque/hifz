@@ -3,6 +3,7 @@ from pathlib import Path
 from hifz.dataserver import DataServer
 from hifz.models import Card
 
+
 @pytest.fixture(scope="session")
 def test_dataserver_returns_card_csv(tmp_path_factory):
     server = DataServer()
@@ -11,6 +12,7 @@ def test_dataserver_returns_card_csv(tmp_path_factory):
         f.writelines(["front,back", "ب,baa"])
     cards = server.read_entries(tmp_file_path)
     assert Card("ب", "baa'") in cards
+
 
 @pytest.fixture(scope="session")
 def test_dataserver_returns_card_json(tmp_file):
