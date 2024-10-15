@@ -25,9 +25,9 @@ def load_cards(file_path: str) -> list[Card]:
 
 def get_strategy(strategy: str) -> CardStrategy:
     match strategy:
-        case "Random":
+        case "random":
             return RandomStrategy()
-        case "Sequential":
+        case "sequential":
             return SequentialStrategy()
         case _:
             error_message = f"{strategy} is not a valid strategy"
