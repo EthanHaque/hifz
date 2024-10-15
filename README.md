@@ -11,7 +11,7 @@ git clone https://github.com/EthanHaque/hifz
 cd hifz
 ```
 
-### 2. Create a Virtual Environment (Recommended)
+### 2. Create a Virtual Environment
 
 ```bash
 uv venv
@@ -23,13 +23,13 @@ source .venv/bin/activate
 Now that you're in the project directory, install the required dependencies. The `pyproject.toml` file defines the necessary packages. Run the following command to install the base dependencies:
 
 ```bash
-pip install -e .
+uv pip install -e .
 ```
 
 If you want to install additional dependencies for development and testing, use:
 
 ```bash
-pip install -e .[dev,test]
+uv pip install -e .[dev,test]
 ```
 
 ### 4. Set Up Pre-Commit Hooks
@@ -55,5 +55,6 @@ This will look for tests in the `tests` directory and execute them.
 The project uses `ruff` for linting and formatting code. You can manually run the linter to check and fix code quality issues by executing:
 
 ```bash
-ruff check --fix .
+uvx ruff check . --fix
+uvx ruff format .
 ```
