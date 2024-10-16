@@ -1,5 +1,5 @@
 from hifz.learning_strategies import RandomStrategy, SequentialStrategy
-from hifz.models import Card
+from hifz.models import Card, Feedback
 from hifz.utils import CardSession
 
 
@@ -33,3 +33,22 @@ def test_sequential_strategy_wraps_around(cards: list[Card]):
 
     card = session.next_card()
     assert card == cards[0], "SequentialStrategy did not wrap around."
+
+
+def test_random_strategy_processes_feedback(cards):
+    random_strategy = RandomStrategy()
+    session = CardSession(cards, random_strategy)
+
+    card = session.next_card()
+    feedback = Feedback({"correct": True})
+    random_strategy.process_feedback(card, feedback)
+    assert card.performance.correct_guesses == 1
+
+def test_sequential_strategy_processes_feedback(cards):
+    sequential_strategy = SequentialStrategy()
+    session = CardSession(cards, sequential_strategy)
+
+    card = session.next_card()
+    feedback = Feedback({"correct": False})
+    sequential_strategy.process_feedback(card, feedback)
+    assert card.performance.incorrect_guesses == 1
