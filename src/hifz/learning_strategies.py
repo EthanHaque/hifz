@@ -26,7 +26,7 @@ class RandomStrategy(CardStrategy):
 
 
 class SequentialStrategy(CardStrategy):
-    def __init__(self):
+    def __init__(self) -> None:
         self.index = 0
 
     def get_next_card(self, cards: list[Card]) -> Card:
@@ -42,7 +42,7 @@ class SequentialStrategy(CardStrategy):
 
 
 class MasteryStrategy(CardStrategy):
-    def __init__(self):
+    def __init__(self) -> None:
         self.index = 0
 
     def get_next_card(self, cards: list[Card]) -> Card:

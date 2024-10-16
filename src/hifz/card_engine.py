@@ -6,15 +6,13 @@ from hifz.utils import CardSession
 
 class CardEngine:
     def __init__(self, strategy: CardStrategy):
-        self.session = None
         self.strategy = strategy
 
     def get_next_card(self) -> Card:
         return self.session.next_card()
 
     def process_feedback(self, card: Card, **kwargs) -> None:
-        if self.session:
-            self.session.process_feedback(card, **kwargs)
+        self.session.process_feedback(card, **kwargs)
 
     def load_cards(self, file_path: str) -> bool:
         data_server = DataServer()
