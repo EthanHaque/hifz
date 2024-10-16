@@ -88,8 +88,3 @@ ignore = [
 "typing.Set".msg = "Use collections.abc.Set instead."
 "importlib.abc".msg = "Use sp_repo_review._compat.importlib.resources.abc instead."
 "importlib.resources.abc".msg = "Use sp_repo_review._compat.importlib.resources.abc instead."
-
-[tool.uv]
-dev-dependencies = [
-    "pytest-mock>=3.14.0",
-]
