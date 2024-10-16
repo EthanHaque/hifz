@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 from hifz.models import Card
-from hifz.visualizers import CLICardInterface
+from hifz.visualizers.cli import CLICardInterface
 
 
 def test_cli_display_card_front():

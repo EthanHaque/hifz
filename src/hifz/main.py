@@ -2,7 +2,8 @@ import argparse
 
 from hifz.card_engine import CardEngine
 from hifz.learning_strategies import CardStrategy, RandomStrategy, SequentialStrategy
-from hifz.visualizers import CardInterface, CLICardInterface, GUICardInterface
+from hifz.visualizers import CardInterface
+from hifz.visualizers.cli import CLICardInterface
 
 
 def parse_args() -> argparse.Namespace:
@@ -29,6 +30,10 @@ def get_visualizer(visualizer: str) -> CardInterface:
         case "cli":
             return CLICardInterface()
         case "gui":
+            try:
+                from hifz.visualizers.gui import GUICardInterface
+            except ImportError as e:
+                raise e
             return GUICardInterface()
         case _:
             error_message = f"{visualizer} is not a valid visualizer"
