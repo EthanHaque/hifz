@@ -2,7 +2,7 @@ import argparse
 
 from hifz.card_engine import CardEngine
 from hifz.learning_strategies import CardStrategy, RandomStrategy, SequentialStrategy
-from hifz.visualizers import TUICardInterface
+from hifz.visualizers import CLICardInterface
 
 
 def parse_args() -> argparse.Namespace:
@@ -27,7 +27,7 @@ def main():
     args = parse_args()
 
     strategy = get_strategy(args.strategy)
-    interface = TUICardInterface()
+    interface = CLICardInterface()
 
     engine = CardEngine(strategy)
     engine.load_cards(args.filepath)

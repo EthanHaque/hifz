@@ -22,7 +22,7 @@ class CardInterface(ABC):
         """Controls the flow of the session, interacting with the engine as needed."""
 
 
-class TUICardInterface(CardInterface):
+class CLICardInterface(CardInterface):
     def display_card_front(self, card: Card) -> None:
         print(f"\nFront: {card.front}")  # noqa: T201
 
