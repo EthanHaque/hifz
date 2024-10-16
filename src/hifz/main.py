@@ -2,11 +2,12 @@ import argparse
 
 from hifz.card_engine import CardEngine
 from hifz.learning_strategies import CardStrategy, RandomStrategy, SequentialStrategy
-from hifz.visualizers import CLICardInterface
+from hifz.visualizers import CardInterface, CLICardInterface, GUICardInterface
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
+    parser.add_argument("visualizer", help="Type of visualizer to use.")
     parser.add_argument("filepath", help="Path to card file")
     parser.add_argument("strategy", help="Learning strategy")
     return parser.parse_args()
@@ -23,11 +24,22 @@ def get_strategy(strategy: str) -> CardStrategy:
             raise ValueError(error_message)
 
 
+def get_visualizer(visualizer: str) -> CardInterface:
+    match visualizer:
+        case "cli":
+            return CLICardInterface()
+        case "gui":
+            return GUICardInterface()
+        case _:
+            error_message = f"{visualizer} is not a valid visualizer"
+            raise ValueError(error_message)
+
+
 def main():
     args = parse_args()
 
     strategy = get_strategy(args.strategy)
-    interface = CLICardInterface()
+    interface = get_visualizer(args.visualizer)
 
     engine = CardEngine(strategy)
     engine.load_cards(args.filepath)
