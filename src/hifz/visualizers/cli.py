@@ -22,16 +22,14 @@ class CLICardInterface(CardInterface):
             card = engine.get_next_card()
             self.display_card_front(card)
 
-            action = (
-                input(
-                    "(Press Enter to see the back, 'q' to quit, or 'reload' to switch cards): "
-                )
-                .strip()
-                .lower()
-            )
+            action = input(
+                "(Press Enter to see the back, 'q' to quit, 'reload' to switch cards): "
+            ).strip().lower()
+
             if action == "q":
                 self.notify("Exiting the session.")
                 break
+
             if action == "reload":
                 new_file_path = input("Enter the new file path: ")
                 if engine.reload_cards(new_file_path):
@@ -41,3 +39,6 @@ class CLICardInterface(CardInterface):
                 continue
 
             self.display_card_back(card)
+
+            correct = input("Did you get it correct? (y/n): ").strip().lower() == 'y'
+            engine.get_feedback(card, correct)
