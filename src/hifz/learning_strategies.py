@@ -8,7 +8,7 @@ class CardStrategy(ABC):
     @abstractmethod
     def get_next_card(self, cards: list[Card]) -> Card:
         pass
-    
+
     @abstractmethod
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         pass
@@ -17,7 +17,7 @@ class CardStrategy(ABC):
 class RandomStrategy(CardStrategy):
     def get_next_card(self, cards: list[Card]) -> Card:
         return random.choice(cards)
-    
+
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         if feedback.get("correct"):
             card.performance.record_correct()

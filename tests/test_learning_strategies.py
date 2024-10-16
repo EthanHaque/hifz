@@ -44,6 +44,7 @@ def test_random_strategy_processes_feedback(cards):
     random_strategy.process_feedback(card, feedback)
     assert card.performance.correct_guesses == 1
 
+
 def test_sequential_strategy_processes_feedback(cards):
     sequential_strategy = SequentialStrategy()
     session = CardSession(cards, sequential_strategy)

@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 import pytest
 
 from hifz.models import Card
@@ -29,6 +27,7 @@ def utf8_test_file(tmp_path_factory):
         f.write(utf8_content)
     return tmp_file_path
 
+
 @pytest.fixture
 def cards():
     """Fixture to provide a list of sample cards."""
@@ -37,13 +36,3 @@ def cards():
         Card("Capital of Germany?", "Berlin"),
         Card("Capital of Italy?", "Rome"),
     ]
-
-@pytest.fixture
-def mock_dataserver():
-    with patch("hifz.card_engine.DataServer") as MockDataServer:
-        mock_server = MockDataServer.return_value
-        mock_server.read_entries.return_value = [
-            Card("Question 1", "Answer 1"),
-            Card("Question 2", "Answer 2"),
-        ]
-        yield mock_server

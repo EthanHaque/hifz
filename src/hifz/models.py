@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Any
+
 
 @dataclass
 class Feedback:
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
 
     def add(self, key: str, value: Any) -> None:
         """Add a key-value pair to the feedback data."""
@@ -12,6 +13,7 @@ class Feedback:
     def get(self, key: str, default: Any = None) -> Any:
         """Retrieve a value from the feedback data."""
         return self.data.get(key, default)
+
 
 @dataclass
 class CardPerformance:
@@ -23,6 +25,7 @@ class CardPerformance:
 
     def record_incorrect(self):
         self.incorrect_guesses += 1
+
 
 @dataclass
 class Card:

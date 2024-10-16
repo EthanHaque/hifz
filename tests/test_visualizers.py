@@ -20,4 +20,3 @@ def test_cli_display_card_back():
     with patch("builtins.print") as mocked_print:
         interface.display_card_back(card)
         mocked_print.assert_called_once_with("Back: World")
-
