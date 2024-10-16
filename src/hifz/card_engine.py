@@ -1,34 +1,25 @@
+from hifz.dataserver import DataServer
 from hifz.learning_strategies import CardStrategy
 from hifz.models import Card
 from hifz.utils import CardSession
-from hifz.visualizers import CardInterface
 
 
 class CardEngine:
-    def __init__(
-        self, cards: list[Card], strategy: CardStrategy, interface: CardInterface
-    ):
-        self.session = CardSession(cards, strategy)
-        self.interface = interface
+    def __init__(self, strategy: CardStrategy):
+        self.session = None
+        self.strategy = strategy
 
-    def run(self):
-        self.interface.notify("Starting flashcard session... Type 'q' to quit.")
+    def get_next_card(self) -> Card:
+        return self.session.next_card()
 
-        while True:
-            card = self.session.next_card()
-            self.interface.display_card_front(card)
+    def load_cards(self, file_path: str) -> bool:
+        data_server = DataServer()
+        try:
+            new_cards = data_server.read_entries(file_path)
+            self.session = CardSession(new_cards, self.strategy)
+            return True
+        except Exception:
+            return False
 
-            user_input = self.interface.get_user_input(
-                "(Press Enter to see the back, or 'q' to quit): "
-            ).strip()
-            if user_input.lower() == "q":
-                self.interface.notify("Exiting the session.")
-                break
-
-            self.interface.display_card_back(card)
-            feedback = self.interface.get_user_input(
-                "(Press Enter to continue, or 'q' to quit): "
-            ).strip()
-            if feedback.lower() == "q":
-                self.interface.notify("Exiting the session.")
-                break
+    def reload_cards(self, file_path: str) -> bool:
+        return self.load_cards(file_path)
