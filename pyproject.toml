@@ -9,10 +9,10 @@ dependencies = []
 
 [project.optional-dependencies]
 test = [
+    "pytest-mock>=3.14.0",
     "pytest>=8.3.3",
 ]
 dev = [
-    "pytest>=8.3.3",
     "pre-commit>=3.8.0",
 ]
 gui = [
@@ -88,3 +88,8 @@ ignore = [
 "typing.Set".msg = "Use collections.abc.Set instead."
 "importlib.abc".msg = "Use sp_repo_review._compat.importlib.resources.abc instead."
 "importlib.resources.abc".msg = "Use sp_repo_review._compat.importlib.resources.abc instead."
+
+[tool.uv]
+dev-dependencies = [
+    "pytest-mock>=3.14.0",
+]
