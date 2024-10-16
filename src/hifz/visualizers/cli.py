@@ -45,4 +45,4 @@ class CLICardInterface(CardInterface):
             self.display_card_back(card)
 
             correct = input("Did you get it correct? (y/n): ").strip().lower() == "y"
-            engine.get_feedback(card, correct)
+            engine.process_feedback(card, correct=correct)

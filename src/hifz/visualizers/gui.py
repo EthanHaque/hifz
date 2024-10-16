@@ -54,7 +54,7 @@ class GUICardInterface(CardInterface):
 
     def record_result(self, correct: bool):
         if self.engine and self.current_card:
-            self.engine.get_feedback(self.current_card, correct)
+            self.engine.process_feedback(self.current_card, correct=correct)
             self.show_next_card()
 
     def display_card_front(self, card: Card) -> None:
