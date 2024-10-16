@@ -44,7 +44,6 @@ class GUICardInterface(CardInterface):
         self.current_card = None
         self.is_front = True
 
-
         self.correct_button = QPushButton("Correct")
         self.correct_button.clicked.connect(lambda: self.record_result(True))
         self.layout.addWidget(self.correct_button)

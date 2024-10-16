@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+
 @dataclass
 class CardPerformance:
     correct_guesses: int = 0
@@ -10,6 +11,7 @@ class CardPerformance:
 
     def record_incorrect(self):
         self.incorrect_guesses += 1
+
 
 @dataclass
 class Card:

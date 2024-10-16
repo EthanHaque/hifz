@@ -3,6 +3,7 @@ from hifz.learning_strategies import CardStrategy
 from hifz.models import Card
 from hifz.utils import CardSession
 
+
 class CardEngine:
     def __init__(self, strategy: CardStrategy):
         self.session = None
