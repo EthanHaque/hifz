@@ -16,3 +16,15 @@ def test_card_session_with_sequential_strategy(cards: list[Card]):
 
     assert session.next_card() == cards[0]
     assert session.next_card() == cards[1]
+
+
+def test_process_feedback(cards):
+    sequential_strategy = SequentialStrategy()
+    session = CardSession(cards, sequential_strategy)
+
+    card = session.next_card()
+    session.process_feedback(card, correct=True)
+
+    assert card.performance.correct_guesses == 1
+    session.process_feedback(card, correct=False)
+    assert card.performance.incorrect_guesses == 1

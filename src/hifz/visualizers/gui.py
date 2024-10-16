@@ -30,10 +30,6 @@ class GUICardInterface(CardInterface):
         self.card_label.setStyleSheet("font-size: 18px;")
         self.layout.addWidget(self.card_label)
 
-        self.next_button = QPushButton("Next")
-        self.next_button.clicked.connect(self.show_next_card)
-        self.layout.addWidget(self.next_button)
-
         self.flip_button = QPushButton("Flip")
         self.flip_button.clicked.connect(self.flip_card)
         self.layout.addWidget(self.flip_button)
@@ -47,6 +43,19 @@ class GUICardInterface(CardInterface):
         self.engine = None
         self.current_card = None
         self.is_front = True
+
+        self.correct_button = QPushButton("Correct")
+        self.correct_button.clicked.connect(lambda: self.record_result(True))
+        self.layout.addWidget(self.correct_button)
+
+        self.incorrect_button = QPushButton("Incorrect")
+        self.incorrect_button.clicked.connect(lambda: self.record_result(False))
+        self.layout.addWidget(self.incorrect_button)
+
+    def record_result(self, correct: bool):
+        if self.engine and self.current_card:
+            self.engine.process_feedback(self.current_card, correct=correct)
+            self.show_next_card()
 
     def display_card_front(self, card: Card) -> None:
         self.card_label.setText(f"Front: {card.front}")
