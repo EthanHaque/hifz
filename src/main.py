@@ -1,7 +1,12 @@
 import argparse
 
 from hifz.card_engine import CardEngine
-from hifz.learning_strategies import CardStrategy, RandomStrategy, SequentialStrategy
+from hifz.learning_strategies import (
+    CardStrategy,
+    MasteryStrategy,
+    RandomStrategy,
+    SequentialStrategy,
+)
 from hifz.visualizers import CardInterface
 from hifz.visualizers.cli import CLICardInterface
 
@@ -20,6 +25,8 @@ def get_strategy(strategy: str) -> CardStrategy:
             return RandomStrategy()
         case "sequential":
             return SequentialStrategy()
+        case "mastery":
+            return MasteryStrategy()
         case _:
             error_message = f"{strategy} is not a valid strategy"
             raise ValueError(error_message)
