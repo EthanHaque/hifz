@@ -6,6 +6,7 @@ from hifz.utils import CardSession
 
 class CardEngine:
     def __init__(self, strategy: CardStrategy):
+        self.session: CardSession
         self.strategy = strategy
 
     def get_next_card(self) -> Card:
