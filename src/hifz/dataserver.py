@@ -1,36 +1,64 @@
 import csv
 import json
+from abc import ABC, abstractmethod
 from pathlib import Path
 
 from hifz.models import Card
 
 
-class DataServer:
+class FileInputStrategy(ABC):
+    @abstractmethod
+    def read_entries(self, file_path: Path) -> list[Card]:
+        pass
+
+
+class CSVFileInputStrategy(FileInputStrategy):
+    def read_entries(self, file_path: Path) -> list[Card]:
+        with file_path.open("r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            return [Card(e["front"], e["back"]) for e in reader]
+
+
+class JSONFileInputStrategy(FileInputStrategy):
+    def read_entries(self, file_path: Path) -> list[Card]:
+        with file_path.open("r", encoding="utf-8") as f:
+            entries = json.load(f)
+            return [Card(e["front"], e["back"]) for e in entries]
+
+
+class FileInputReader:
+    """Dispatches the appropriate reader strategy based on file extension."""
+
+    def __init__(self):
+        self.strategies = {
+            ".csv": CSVFileInputStrategy(),
+            ".json": JSONFileInputStrategy(),
+        }
+
+    def get_strategy(self, file_extension: str) -> FileInputStrategy:
+        strategy = self.strategies.get(file_extension)
+        if not strategy:
+            msg = f"Unsupported file extension: {file_extension}"
+            raise ValueError(msg)
+        return strategy
+
     def read_entries(self, file_path: str) -> list[Card]:
-        """Reads the entries associatied with the csv at file_path.
+        path = Path(file_path)
+        strategy = self.get_strategy(path.suffix.lower())
+        return strategy.read_entries(path)
 
-        Args:
-            file_path (str): The file path of the csv.
 
-        Returns:
-            list[Card]: The list of cards.
-        """
-        cards = []
-        types_accepted = [".csv", ".json"]
+class DataServer:
+    def __init__(self):
+        self.file_reader = FileInputReader()
+
+    def read_entries(self, file_path: str) -> list[Card]:
+        """Reads the entries associated with the file at file_path."""
         try:
-            with Path(file_path).open(encoding="utf-8") as f:
-                try:
-                    if file_path.lower().endswith(types_accepted[0]):
-                        entries = csv.DictReader(f)
-                    elif file_path.endswith(types_accepted[1]):
-                        entries = json.load(f)
-                except OSError as err:
-                    error_message = f"Error: The file type at path '{file_path}' is not supported.\
-                    please use {",".join(types_accepted)}"
-                    raise OSError(error_message) from err
-                cards = [Card(e["front"], e["back"]) for e in entries]
+            return self.file_reader.read_entries(file_path)
         except FileNotFoundError as err:
-            error_message = f"Error: The file at path '{file_path}' was not found."
-            raise FileNotFoundError(error_message) from err
-
-        return cards
+            msg = f"Error: The file at path '{file_path}' was not found."
+            raise FileNotFoundError(msg) from err
+        except ValueError as err:
+            msg = f"Error: {err}"
+            raise ValueError(msg) from err

@@ -81,3 +81,12 @@ def test_dataserver_empty_json(tmp_path_factory):
     cards = server.read_entries(str(empty_json_file))
 
     assert len(cards) == 0
+
+
+def test_dataserver_unsupported_file_extension(tmp_path_factory):
+    server = DataServer()
+    unsupported_file = tmp_path_factory.mktemp("data") / "unsupported.unsupported"
+    unsupported_file.write_text("This is an unsupported file.")
+
+    with pytest.raises(ValueError, match="Unsupported file extension: .unsupported"):
+        server.read_entries(str(unsupported_file))
