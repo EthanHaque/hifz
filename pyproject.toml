@@ -90,14 +90,9 @@ ignore = [
 "importlib.abc".msg = "Use sp_repo_review._compat.importlib.resources.abc instead."
 "importlib.resources.abc".msg = "Use sp_repo_review._compat.importlib.resources.abc instead."
 
-[tool.uv]
-dev-dependencies = [
-    "pytest-mock>=3.14.0",
-]
-
 [tool.coverage.report]
 exclude_also = [
     "raise NotImplementedError",
     "if __name__ == .__main__.:",
     "@(abc\\.)?abstractmethod",
-    ]
+]
