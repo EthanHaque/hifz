@@ -29,7 +29,7 @@ class JSONFileInputStrategy(FileInputStrategy):
 class FileInputReader:
     """Dispatches the appropriate reader strategy based on file extension."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.strategies = {
             ".csv": CSVFileInputStrategy(),
             ".json": JSONFileInputStrategy(),
@@ -49,7 +49,7 @@ class FileInputReader:
 
 
 class DataServer:
-    def __init__(self):
+    def __init__(self) -> None:
         self.file_reader = FileInputReader()
 
     def read_entries(self, file_path: str) -> list[Card]:

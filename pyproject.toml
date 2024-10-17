@@ -71,6 +71,7 @@ extend-select = [
     "SIM",         # flake8-simplify
     "TID251",      # flake8-tidy-imports.banned-api
     "T20",         # flake8-print
+    "ANN204",      # flake8-annotations
     "UP",          # pyupgrade
     "YTT",         # flake8-2020
 ]

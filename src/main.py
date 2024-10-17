@@ -47,7 +47,7 @@ def get_visualizer(visualizer: str) -> CardInterface:
             raise ValueError(error_message)
 
 
-def main():
+def main() -> None:
     args = parse_args()
 
     strategy = get_strategy(args.strategy)

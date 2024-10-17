@@ -1,7 +1,7 @@
 import sys
 
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import (
+from PyQt6.QtCore import Qt  # type: ignore[import-not-found]
+from PyQt6.QtWidgets import (  # type: ignore[import-not-found]
     QApplication,
     QFileDialog,
     QLabel,
@@ -17,7 +17,7 @@ from hifz.visualizers import CardInterface
 
 
 class GUICardInterface(CardInterface):
-    def __init__(self):
+    def __init__(self) -> None:
         self.app = QApplication(sys.argv)
         self.window = QWidget()
         self.window.setWindowTitle("Flashcard App")
@@ -40,8 +40,8 @@ class GUICardInterface(CardInterface):
 
         self.window.setLayout(self.layout)
 
-        self.engine = None
-        self.current_card = None
+        self.engine: CardEngine
+        self.current_card: Card
         self.is_front = True
 
         self.correct_button = QPushButton("Correct")
@@ -52,10 +52,9 @@ class GUICardInterface(CardInterface):
         self.incorrect_button.clicked.connect(lambda: self.record_result(False))
         self.layout.addWidget(self.incorrect_button)
 
-    def record_result(self, correct: bool):
-        if self.engine and self.current_card:
-            self.engine.process_feedback(self.current_card, correct=correct)
-            self.show_next_card()
+    def record_result(self, correct: bool) -> None:
+        self.engine.process_feedback(self.current_card, correct=correct)
+        self.show_next_card()
 
     def display_card_front(self, card: Card) -> None:
         self.card_label.setText(f"Front: {card.front}")
@@ -74,17 +73,15 @@ class GUICardInterface(CardInterface):
         self.window.show()
         sys.exit(self.app.exec())
 
-    def show_next_card(self):
-        if self.engine:
-            self.current_card = self.engine.get_next_card()
-            self.display_card_front(self.current_card)
+    def show_next_card(self) -> None:
+        self.current_card = self.engine.get_next_card()
+        self.display_card_front(self.current_card)
 
-    def flip_card(self):
-        if self.current_card:
-            if self.is_front:
-                self.display_card_back(self.current_card)
-            else:
-                self.display_card_front(self.current_card)
+    def flip_card(self) -> None:
+        if self.is_front:
+            self.display_card_back(self.current_card)
+        else:
+            self.display_card_front(self.current_card)
 
     def reload_cards(self):
         new_file_path = QFileDialog.getOpenFileName(

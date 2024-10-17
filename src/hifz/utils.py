@@ -3,7 +3,7 @@ from hifz.models import Card, Feedback
 
 
 class CardSession:
-    def __init__(self, cards: list[Card], strategy: CardStrategy):
+    def __init__(self, cards: list[Card], strategy: CardStrategy) -> None:
         self.cards = cards
         self.strategy = strategy
 

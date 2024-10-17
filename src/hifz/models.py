@@ -20,10 +20,10 @@ class CardPerformance:
     correct_guesses: int = 0
     incorrect_guesses: int = 0
 
-    def record_correct(self):
+    def record_correct(self) -> None:
         self.correct_guesses += 1
 
-    def record_incorrect(self):
+    def record_incorrect(self) -> None:
         self.incorrect_guesses += 1
 
 
