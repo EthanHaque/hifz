@@ -29,3 +29,10 @@ def test_reload_cards(utf8_test_file):
     assert engine.load_cards(str(utf8_test_file)) is True
     assert engine.reload_cards(str(utf8_test_file)) is True
     assert len(engine.session.cards) == 2
+
+
+def test_engine_unsupported_file_extension(tmp_path_factory):
+    engine = CardEngine(RandomStrategy())
+    unsupported_file = tmp_path_factory.mktemp("data") / "unsupported.unsupported"
+    unsupported_file.write_text("This is an unsupported file.")
+    assert engine.load_cards(str(unsupported_file)) is False
