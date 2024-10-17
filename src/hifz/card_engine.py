@@ -5,7 +5,7 @@ from hifz.utils import CardSession
 
 
 class CardEngine:
-    def __init__(self, strategy: CardStrategy):
+    def __init__(self, strategy: CardStrategy) -> None:
         self.session: CardSession
         self.strategy = strategy
 
