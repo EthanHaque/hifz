@@ -3,7 +3,7 @@ import sys
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QApplication,
-    QInputDialog,
+    QFileDialog,
     QLabel,
     QMessageBox,
     QPushButton,
@@ -87,11 +87,11 @@ class GUICardInterface(CardInterface):
                 self.display_card_front(self.current_card)
 
     def reload_cards(self):
-        new_file_path, ok = QInputDialog.getText(
-            self.window, "Reload Cards", "Enter new file path:"
-        )
-        if ok and new_file_path:
-            if self.engine.reload_cards(new_file_path):
-                self.notify("Cards reloaded successfully.")
-            else:
-                self.notify("Failed to reload cards.")
+        new_file_path = QFileDialog.getOpenFileName(
+            self.window, "Open File", "{$HOME}"
+        )[0]
+        if self.engine.reload_cards(new_file_path):
+            self.notify("Cards reloaded successfully.")
+        else:
+            self.notify("Failed to reload cards.")
+        self.show_next_card()
