@@ -67,14 +67,14 @@ def get_visualizer(visualizer: str) -> Visualizer:
                 from hifz.visualizers.gui import GUIVisualizer
             except ImportError as e:
                 raise e
-            return GUICardInterface()
+            return GUIVisualizer()
         case "tui":
             # Prevents python from importing deps for the TUI like textual.
             try:
-                from hifz.visualizers.tui import TUICardInterface
+                from hifz.visualizers.tui import TUIVisualizer
             except ImportError as e:
                 raise e
-            return TUICardInterface()
+            return TUIVisualizer()
         case _:
             error_message = f"{visualizer} is not a valid visualizer"
             raise ValueError(error_message)

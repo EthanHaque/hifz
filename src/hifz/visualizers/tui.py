@@ -5,7 +5,7 @@ from textual.widgets import Footer, Header, Static
 
 from hifz.card_engine import CardEngine
 from hifz.models import BinaryFeedback, Card
-from hifz.visualizers import CardInterface
+from hifz.visualizers import Visualizer
 
 
 class CardWidget(Static):
@@ -101,7 +101,7 @@ class CardApp(App):
         self.action_next_card()
 
 
-class TUICardInterface(CardInterface):
+class TUIVisualizer(Visualizer):
     """Wrapper class to conform to the CardInterface API."""
 
     def run_session(self, engine: CardEngine) -> None:
