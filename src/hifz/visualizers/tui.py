@@ -1,35 +1,56 @@
-from hifz.card_engine import CardEngine
-from hifz.models import Card
-from hifz.visualizers import CardInterface
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer
+from textual.widgets import Footer, Header, Static
+from hifz.card_engine import CardEngine
+from hifz.visualizers import CardInterface
+from hifz.models import Card
 
 
-class StopwatchApp(App):
-    """A Textual app to manage stopwatches."""
+class CardWidget(Static):
+    """A widget to display cards."""
 
-    BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]
+    is_front = True
+    current_card: Card
+
+    def update_card(self, card: Card) -> None:
+        self.current_card = card
+        self.is_front = True
+        self.update(self.current_card.front)
+
+    def flip(self) -> None:
+        self.is_front = not self.is_front
+        if self.is_front:
+            self.update(self.current_card.front)
+        else:
+            self.update(self.current_card.back)
+
+
+class CardApp(App):
+    BINDINGS = [
+        ("j", "flip_card", "Flip Card"),
+        ("k", "flip_card", "Flip Card"),
+        ("l", "next_card", "Next Card"),
+    ]
+
+    def __init__(self, engine: CardEngine, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.engine = engine
 
     def compose(self) -> ComposeResult:
-        """Create child widgets for the app."""
         yield Header()
         yield Footer()
+        yield CardWidget()
 
-    def action_toggle_dark(self) -> None:
-        """An action to toggle dark mode."""
-        self.dark = not self.dark
+    def action_flip_card(self) -> None:
+        self.query_one(CardWidget).flip()
+
+    def action_next_card(self) -> None:
+        next_card = self.engine.get_next_card()
+        self.query_one(CardWidget).update_card(next_card)
+
+    def on_mount(self) -> None:
+        self.action_next_card()
 
 
 class TUICardInterface(CardInterface):
-    def display_card_front(self, card: Card) -> None:
-        pass
-
-    def display_card_back(self, card: Card) -> None:
-        pass
-
-    def notify(self, message: str) -> None:
-        pass
-
     def run_session(self, engine: CardEngine) -> None:
-        app = StopwatchApp()
-        app.run()
+        CardApp(engine).run()
