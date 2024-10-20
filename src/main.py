@@ -11,6 +11,7 @@ from hifz.learning_strategies import (
 )
 from hifz.visualizers import CardInterface
 from hifz.visualizers.cli import CLICardInterface
+from hifz.visualizers.tui import TUICardInterface
 
 
 def parse_args() -> argparse.Namespace:
@@ -47,6 +48,8 @@ def get_visualizer(visualizer: str) -> CardInterface:
             except ImportError as e:
                 raise e
             return GUICardInterface()
+        case "tui":
+            return TUICardInterface()
         case _:
             error_message = f"{visualizer} is not a valid visualizer"
             raise ValueError(error_message)
