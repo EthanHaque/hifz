@@ -62,4 +62,4 @@ uvx ruff format .
 ```
 
 > [!TIP]
-> We do not list pre-commit, ruff, and mypy are development tools, not dependencies. If you would like to use these tools in an isolated environment, use, for example, `uv tool install ruff`, and you'll be able to run them anywhere for any project on your computer from an isolated environment.
+> We do not list pre-commit, ruff, and mypy as development dependencies. As they are tools, not dependencies. If you would like to use these tools in an isolated environment, use `uv tool install`, and you'll be able to run them anywhere for any relevant projects on your computer from an isolated environment.
