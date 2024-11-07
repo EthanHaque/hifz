@@ -4,6 +4,18 @@ from hifz.utils import CardSession
 
 
 def test_card_session_with_random_strategy(cards: list[Card]):
+    """
+    Test CardSession behavior with RandomStrategy.
+
+    Verifies that the RandomStrategy in CardSession can select any card from
+    the list, without going out of bounds.
+
+    Args:
+        cards (list[Card]): List of Card objects.
+
+    Asserts:
+        - The card selected by RandomStrategy is within the original list.
+    """
     random_strategy = RandomStrategy()
     session = CardSession(cards, random_strategy)
     card = session.next_card()
@@ -11,6 +23,18 @@ def test_card_session_with_random_strategy(cards: list[Card]):
 
 
 def test_card_session_with_sequential_strategy(cards: list[Card]):
+    """
+    Test CardSession behavior with SequentialStrategy.
+
+    Verifies that the SequentialStrategy in CardSession returns cards in the
+    exact order they appear in the provided list.
+
+    Args:
+        cards (list[Card]): List of Card objects.
+
+    Asserts:
+        - The first and second cards returned are the first and second in the list.
+    """
     sequential_strategy = SequentialStrategy()
     session = CardSession(cards, sequential_strategy)
 
@@ -19,6 +43,19 @@ def test_card_session_with_sequential_strategy(cards: list[Card]):
 
 
 def test_process_feedback(cards):
+    """
+    Test processing feedback in CardSession with SequentialStrategy.
+
+    Checks that feedback (correct or incorrect) updates the performance metrics
+    of the card appropriately within the session.
+
+    Args:
+        cards (list[Card]): List of Card objects.
+
+    Asserts:
+        - correct_guesses count is incremented after positive feedback.
+        - incorrect_guesses count is incremented after negative feedback.
+    """
     sequential_strategy = SequentialStrategy()
     session = CardSession(cards, sequential_strategy)
 
