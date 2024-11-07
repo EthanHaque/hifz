@@ -3,6 +3,18 @@ from hifz.visualizers.cli import CLICardInterface
 
 
 def test_cli_display_card_front(mocker):
+    """
+    Test display of card front in the CLI.
+
+    Verifies that the `display_card_front` method in CLICardInterface
+    correctly outputs the card's front text to the console.
+
+    Args:
+        mocker (MockerFixture): Fixture for mocking dependencies.
+
+    Asserts:
+        - `print` is called once with the correct text for the card's front.
+    """
     interface = CLICardInterface()
     card = Card("Hello", "World")
 
@@ -12,6 +24,18 @@ def test_cli_display_card_front(mocker):
 
 
 def test_cli_display_card_back(mocker):
+    """
+    Test display of card back in the CLI.
+
+    Verifies that the `display_card_back` method in CLICardInterface
+    correctly outputs the card's back text to the console.
+
+    Args:
+        mocker (MockerFixture): Fixture for mocking dependencies.
+
+    Asserts:
+        - `print` is called once with the correct text for the card's back.
+    """
     interface = CLICardInterface()
     card = Card("Hello", "World")
 
