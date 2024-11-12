@@ -5,15 +5,15 @@ from hifz.learning_strategies import RandomStrategy, SequentialStrategy
 def test_load_cards(utf8_test_file):
     """
     Test the load_cards method of CardEngine with a UTF-8 encoded file.
-    
+
     Verifies that cards are successfully loaded from the specified file,
     and that the loaded card count matches the expected number.
-    
+
     Args:
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
-    
+
     Asserts:
-        - load_cards() returns True if cards were successfully loaded 
+        - load_cards() returns True if cards were successfully loaded
         - The number of cards currently loaded is 2
     """
     engine = CardEngine(SequentialStrategy())
@@ -24,13 +24,13 @@ def test_load_cards(utf8_test_file):
 def test_get_next_card(utf8_test_file):
     """
     Test retrieving the next card in the sequence.
-    
+
     Ensures that, after loading cards, the first card returned by get_next_card()
     matches the expected content, verifying that the sequence works as expected.
-    
+
     Args:
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
-    
+
     Asserts:
         - The 'front' field of the first card matches the expected Arabic character, ب.
     """
@@ -43,13 +43,13 @@ def test_get_next_card(utf8_test_file):
 def test_process_feedback(utf8_test_file):
     """
     Test processing feedback for a card's performance.
-    
+
     Simulates giving correct feedback for a card and verifies that the performance
     metrics (correct guesses) are updated accordingly.
-    
+
     Args:
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
-    
+
     Asserts:
         - The correct_guesses count for the card is incremented to 1.
     """
@@ -72,8 +72,8 @@ def test_reload_cards(utf8_test_file):
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
 
     Asserts:
-        - load_cards() returns True if cards were successfully loaded 
-        - reload_cards() returns True if cards were successfully reloaded 
+        - load_cards() returns True if cards were successfully loaded
+        - reload_cards() returns True if cards were successfully reloaded
         - The card count remains consistent (2) after reloading.
     """
     engine = CardEngine(RandomStrategy())

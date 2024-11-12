@@ -7,11 +7,11 @@ from hifz.models import Card
 def csv_file(tmp_path_factory):
     """
     Fixture that creates a temporary CSV file for testing.
-    
+
     The CSV file contains sample Arabic characters and their English transliterations.
     It includes two columns: 'front' and 'back', representing the question and answer sides
     of a card, respectively.
-    
+
     Args:
         tmp_path_factory (TempPathFactory): Fixture for creating temporary paths.
 
@@ -28,14 +28,14 @@ def csv_file(tmp_path_factory):
 def json_file(tmp_path_factory):
     """
     Fixture that creates a temporary JSON file for testing.
-    
+
     The JSON file contains Arabic characters with their English transliterations,
     stored as dictionaries with 'front' and 'back' keys representing question and answer
     sides of a card, respectively.
 
     Args:
         tmp_path_factory (TempPathFactory): Fixture for creating temporary paths.
-    
+
     Returns:
         tmp_file_path (TempPathFactory): Path to the temporary JSON file.
     """
@@ -49,10 +49,10 @@ def json_file(tmp_path_factory):
 def utf8_test_file(tmp_path_factory):
     """
     Fixture that creates a temporary CSV file with UTF-8 encoded content for testing.
-    
+
     The CSV file contains sample characters in multiple languages (Arabic and Kanji),
     allowing testing of UTF-8 encoding support. Columns are labeled 'front' and 'back'.
-    
+
     Args:
         tmp_path_factory (TempPathFactory): Fixture for creating temporary paths.
 
@@ -70,10 +70,10 @@ def utf8_test_file(tmp_path_factory):
 def cards():
     """
     Fixture that provides a sample list of Card objects.
-    
-    This list instanciates a test set of flashcards with questions about 
+
+    This list instanciates a test set of flashcards with questions about
     European countries and their respective capital cities.
-    
+
     Returns:
         list(Card): List of Card objects with sample data.
     """
