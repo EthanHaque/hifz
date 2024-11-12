@@ -15,7 +15,8 @@ def test_utf8_encoding_support(utf8_test_file):
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
 
     Asserts:
-        - The card with Arabic and the card with Kanji content are in the output list.
+        - Card("ب", "baa") is in the output list.
+        - Card("漢字", "kanji") is in the output list.
     """
     server = DataServer()
     cards = server.read_entries(str(utf8_test_file))
@@ -34,7 +35,7 @@ def test_dataserver_returns_card_csv(csv_file):
         csv_file (Path): Path to a CSV file with sample Arabic content.
 
     Asserts:
-        - The expected card with Arabic content is in the output list.
+        - Card("ب", "baa") is in the output list.
     """
     server = DataServer()
     cards = server.read_entries(str(csv_file))
@@ -52,7 +53,7 @@ def test_dataserver_returns_card_json(json_file):
         json_file (Path): Path to a JSON file with sample Arabic content.
 
     Asserts:
-        - The expected card with Arabic content is in the output list.
+        - Card("ب", "baa") is in the output list.
     """
     server = DataServer()
     cards = server.read_entries(str(json_file))

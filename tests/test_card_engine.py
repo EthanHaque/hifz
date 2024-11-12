@@ -13,8 +13,8 @@ def test_load_cards(utf8_test_file):
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
     
     Asserts:
-        - load_cards() returns True, indicating successful load.
-        - The number of cards loaded is as expected.
+        - load_cards() returns True if cards were successfully loaded 
+        - The number of cards currently loaded is 2
     """
     engine = CardEngine(SequentialStrategy())
     assert engine.load_cards(str(utf8_test_file)) is True
@@ -32,7 +32,7 @@ def test_get_next_card(utf8_test_file):
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
     
     Asserts:
-        - The 'front' field of the first card matches the expected Arabic character.
+        - The 'front' field of the first card matches the expected Arabic character, ب.
     """
     engine = CardEngine(SequentialStrategy())
     engine.load_cards(str(utf8_test_file))
@@ -51,7 +51,7 @@ def test_process_feedback(utf8_test_file):
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
     
     Asserts:
-        - The correct_guesses count for the card is incremented as expected.
+        - The correct_guesses count for the card is incremented to 1.
     """
     engine = CardEngine(SequentialStrategy())
     engine.load_cards(str(utf8_test_file))
@@ -72,8 +72,9 @@ def test_reload_cards(utf8_test_file):
         utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
 
     Asserts:
-        - load_cards() and reload_cards() both return True, indicating success.
-        - The card count remains consistent after reloading.
+        - load_cards() returns True if cards were successfully loaded 
+        - reload_cards() returns True if cards were successfully reloaded 
+        - The card count remains consistent (2) after reloading.
     """
     engine = CardEngine(RandomStrategy())
     assert engine.load_cards(str(utf8_test_file)) is True

@@ -12,8 +12,11 @@ def csv_file(tmp_path_factory):
     It includes two columns: 'front' and 'back', representing the question and answer sides
     of a card, respectively.
     
+    Args:
+        tmp_path_factory (TempPathFactory): Fixture for creating temporary paths.
+
     Returns:
-        Path to the temporary CSV file.
+        tmp_file_path (TempPathFactory): Path to the temporary CSV file.
     """
     tmp_file_path = tmp_path_factory.mktemp("data") / "test_arabic.csv"
     with tmp_file_path.open("w", encoding="utf-8") as f:
@@ -27,10 +30,14 @@ def json_file(tmp_path_factory):
     Fixture that creates a temporary JSON file for testing.
     
     The JSON file contains Arabic characters with their English transliterations,
-    stored as dictionaries with 'front' and 'back' keys representing question and answer.
+    stored as dictionaries with 'front' and 'back' keys representing question and answer
+    sides of a card, respectively.
+
+    Args:
+        tmp_path_factory (TempPathFactory): Fixture for creating temporary paths.
     
     Returns:
-        Path to the temporary JSON file.
+        tmp_file_path (TempPathFactory): Path to the temporary JSON file.
     """
     tmp_file_path = tmp_path_factory.mktemp("data") / "test_arabic.json"
     with tmp_file_path.open("w", encoding="utf-8") as f:
@@ -46,8 +53,11 @@ def utf8_test_file(tmp_path_factory):
     The CSV file contains sample characters in multiple languages (Arabic and Kanji),
     allowing testing of UTF-8 encoding support. Columns are labeled 'front' and 'back'.
     
+    Args:
+        tmp_path_factory (TempPathFactory): Fixture for creating temporary paths.
+
     Returns:
-        Path to the temporary CSV file with UTF-8 encoded content.
+        tmp_file_path (TempPathFactory): Path to the temporary CSV file with UTF-8 encoded content.
     """
     tmp_file_path = tmp_path_factory.mktemp("data") / "utf8_test.csv"
     utf8_content = "front,back\nب,baa\n漢字,kanji\n"
@@ -61,11 +71,11 @@ def cards():
     """
     Fixture that provides a sample list of Card objects.
     
-    This list simulates a set of flashcards with questions about European capitals
-    and their respective answers.
+    This list instanciates a test set of flashcards with questions about 
+    European countries and their respective capital cities.
     
     Returns:
-        List of Card objects with sample data.
+        list(Card): List of Card objects with sample data.
     """
     return [
         Card("Capital of France?", "Paris"),
