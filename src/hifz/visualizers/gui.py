@@ -52,6 +52,10 @@ class GUICardInterface(CardInterface):
         self.incorrect_button.clicked.connect(lambda: self.record_result(False))
         self.layout.addWidget(self.incorrect_button)
 
+        self.end_session_button = QPushButton("End Session")
+        self.end_session_button.clicked.connect(lambda: self.end_session())
+        self.layout.addWidget(self.end_session_button)
+
     def record_result(self, correct: bool) -> None:
         self.engine.process_feedback(self.current_card, correct=correct)
         self.show_next_card()
@@ -83,7 +87,7 @@ class GUICardInterface(CardInterface):
         else:
             self.display_card_front(self.current_card)
 
-    def reload_cards(self):
+    def reload_cards(self) -> None:
         new_file_path = QFileDialog.getOpenFileName(
             self.window, "Open File", "{$HOME}"
         )[0]
@@ -92,3 +96,7 @@ class GUICardInterface(CardInterface):
         else:
             self.notify("Failed to reload cards.")
         self.show_next_card()
+
+    def end_session(self) -> None:
+        self.notify(self.engine.get_summary())
+        self.window.close()

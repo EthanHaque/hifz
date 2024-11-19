@@ -26,3 +26,6 @@ class CardEngine:
 
     def reload_cards(self, file_path: str) -> bool:
         return self.load_cards(file_path)
+
+    def get_summary(self) -> str:
+        return self.session.get_summary()
