@@ -16,7 +16,12 @@ test = [
 gui = [
     "pyqt6>=6.7.1",
 ]
-
+docs = [
+    "sphinx>=8.1.3",
+    "furo",  # Theme
+    "myst_parser >=0.13",  # Markdown
+    "sphinx_copybutton",  # Easy code copy button
+]
 
 [build-system]
 requires = ["setuptools", "wheel"]
@@ -53,6 +58,7 @@ disallow_incomplete_defs = false
 [tool.ruff.lint]
 extend-select = [
     "B",           # flake8-bugbear
+    "D",           # pydocstyle
     "I",           # isort
     "ARG",         # flake8-unused-arguments
     "C4",          # flake8-comprehensions
@@ -78,6 +84,8 @@ ignore = [
     "RUF012", # Would require a lot of ClassVar's
 ]
 
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "typing.Callable".msg = "Use collections.abc.Callable instead."
@@ -94,3 +102,6 @@ exclude_also = [
     "if __name__ == .__main__.:",
     "@(abc\\.)?abstractmethod",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D"]

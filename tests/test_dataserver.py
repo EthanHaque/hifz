@@ -5,8 +5,7 @@ from hifz.models import Card
 
 
 def test_utf8_encoding_support(utf8_test_file):
-    """
-    Test that DataServer can correctly read entries from a UTF-8 encoded file.
+    """Test that DataServer can correctly read entries from a UTF-8 encoded file.
 
     Verifies that cards with multi-language content (Arabic and Kanji) are
     properly recognized and stored as Card objects.
@@ -26,8 +25,7 @@ def test_utf8_encoding_support(utf8_test_file):
 
 
 def test_dataserver_returns_card_csv(csv_file):
-    """
-    Test that DataServer reads card entries from a CSV file correctly.
+    """Test that DataServer reads card entries from a CSV file correctly.
 
     Verifies that a simple CSV file is read and its contents are stored as Card objects.
 
@@ -43,8 +41,7 @@ def test_dataserver_returns_card_csv(csv_file):
 
 
 def test_dataserver_returns_card_json(json_file):
-    """
-    Test that DataServer reads card entries from a JSON file correctly.
+    """Test that DataServer reads card entries from a JSON file correctly.
 
     Verifies that a JSON file with Arabic characters is read properly, and its contents
     are stored as Card objects.
@@ -61,8 +58,7 @@ def test_dataserver_returns_card_json(json_file):
 
 
 def test_dataserver_file_not_found():
-    """
-    Test that DataServer raises a FileNotFoundError for a non-existent file.
+    """Test that DataServer raises a FileNotFoundError for a non-existent file.
 
     Attempts to read from a file path that doesn't exist and verifies that
     the appropriate exception is raised with a clear error message.
@@ -82,8 +78,7 @@ def test_dataserver_file_not_found():
 
 
 def test_dataserver_empty_csv(tmp_path_factory):
-    """
-    Test that DataServer correctly handles an empty CSV file.
+    """Test that DataServer correctly handles an empty CSV file.
 
     Creates an empty CSV file (header only) and verifies that no cards are returned.
 
@@ -104,8 +99,7 @@ def test_dataserver_empty_csv(tmp_path_factory):
 
 
 def test_dataserver_empty_json(tmp_path_factory):
-    """
-    Test that DataServer correctly handles an empty JSON file.
+    """Test that DataServer correctly handles an empty JSON file.
 
     Creates an empty JSON array and verifies that no cards are returned.
 
@@ -126,8 +120,7 @@ def test_dataserver_empty_json(tmp_path_factory):
 
 
 def test_dataserver_unsupported_file_extension(tmp_path_factory):
-    """
-    Test that DataServer raises a ValueError for unsupported file extensions.
+    """Test that DataServer raises a ValueError for unsupported file extensions.
 
     Creates a file with an unsupported extension and verifies that the
     appropriate exception is raised with a clear error message.
