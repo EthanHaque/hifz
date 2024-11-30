@@ -5,8 +5,7 @@ from hifz.models import Card
 
 @pytest.fixture
 def csv_file(tmp_path_factory):
-    """
-    Fixture that creates a temporary CSV file for testing.
+    """Fixture that creates a temporary CSV file for testing.
 
     The CSV file contains sample Arabic characters and their English transliterations.
     It includes two columns: 'front' and 'back', representing the question and answer sides
@@ -26,8 +25,7 @@ def csv_file(tmp_path_factory):
 
 @pytest.fixture
 def json_file(tmp_path_factory):
-    """
-    Fixture that creates a temporary JSON file for testing.
+    """Fixture that creates a temporary JSON file for testing.
 
     The JSON file contains Arabic characters with their English transliterations,
     stored as dictionaries with 'front' and 'back' keys representing question and answer
@@ -47,8 +45,7 @@ def json_file(tmp_path_factory):
 
 @pytest.fixture
 def utf8_test_file(tmp_path_factory):
-    """
-    Fixture that creates a temporary CSV file with UTF-8 encoded content for testing.
+    """Fixture that creates a temporary CSV file with UTF-8 encoded content for testing.
 
     The CSV file contains sample characters in multiple languages (Arabic and Kanji),
     allowing testing of UTF-8 encoding support. Columns are labeled 'front' and 'back'.
@@ -68,8 +65,7 @@ def utf8_test_file(tmp_path_factory):
 
 @pytest.fixture
 def cards():
-    """
-    Fixture that provides a sample list of Card objects.
+    """Fixture that provides a sample list of Card objects.
 
     This list instanciates a test set of flashcards with questions about
     European countries and their respective capital cities.

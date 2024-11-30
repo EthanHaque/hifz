@@ -4,8 +4,7 @@ from hifz.utils import CardSession
 
 
 def test_card_session_with_random_strategy(cards: list[Card]):
-    """
-    Test CardSession behavior with RandomStrategy.
+    """Test CardSession behavior with RandomStrategy.
 
     Verifies that the RandomStrategy in CardSession can select any card from
     the list, without going out of bounds.
@@ -23,8 +22,7 @@ def test_card_session_with_random_strategy(cards: list[Card]):
 
 
 def test_card_session_with_sequential_strategy(cards: list[Card]):
-    """
-    Test CardSession behavior with SequentialStrategy.
+    """Test CardSession behavior with SequentialStrategy.
 
     Verifies that the SequentialStrategy in CardSession returns cards in the
     exact order they appear in the provided list.
@@ -43,8 +41,7 @@ def test_card_session_with_sequential_strategy(cards: list[Card]):
 
 
 def test_process_feedback(cards):
-    """
-    Test processing feedback in CardSession with SequentialStrategy.
+    """Test processing feedback in CardSession with SequentialStrategy.
 
     Checks that feedback (correct or incorrect) updates the performance metrics
     of the card appropriately within the session.
