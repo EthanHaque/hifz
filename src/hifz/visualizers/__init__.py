@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 
 from hifz.card_engine import CardEngine
+from hifz.models import Card
 
 
 class CardInterface(ABC):
