@@ -1,7 +1,7 @@
 [project]
 name = "hifz"
 version = "0.1.0"
-description = "Add your description here"
+description = "A flashcard application."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
@@ -12,9 +12,6 @@ test = [
     "pytest-mock>=3.14.0",
     "pytest>=8.3.3",
     "coverage>=7.6.3",
-]
-dev = [
-    "pre-commit>=3.8.0",
 ]
 gui = [
     "pyqt6>=6.7.1",
