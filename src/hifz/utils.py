@@ -15,4 +15,3 @@ class CardSession:
     def next_card(self) -> Card:
         """Returns the next card."""
         return self.strategy.get_next_card(self.cards)
-      
