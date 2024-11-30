@@ -63,3 +63,17 @@ uvx ruff format .
 
 > [!TIP]
 > We do not list pre-commit, ruff, and mypy as development dependencies. As they are tools, not dependencies. If you would like to use these tools in an isolated environment, use `uv tool install`, and you'll be able to run them anywhere for any relevant projects on your computer from an isolated environment.
+
+## Usage
+
+To see general program usage information, run:
+```bash
+uv run src/hifz -h
+```
+
+Here are some examples one can run the dummy data:
+```bash
+uv pip install -e .[gui]
+uv run src/hifz cli data/arabic_letters.json random
+uv run src/hifz gui data/fruits.csv mastery
+```
