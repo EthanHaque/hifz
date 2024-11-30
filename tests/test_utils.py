@@ -1,5 +1,5 @@
 from hifz.learning_strategies import RandomStrategy, SequentialStrategy
-from hifz.models import Card
+from hifz.models import Card, Feedback
 from hifz.utils import CardSession
 
 
@@ -57,8 +57,8 @@ def test_process_feedback(cards):
     session = CardSession(cards, sequential_strategy)
 
     card = session.next_card()
-    session.process_feedback(card, correct=True)
+    session.strategy.process_feedback(card, Feedback({"correct": True}))
 
     assert card.performance.correct_guesses == 1
-    session.process_feedback(card, correct=False)
+    session.strategy.process_feedback(card, Feedback({"correct": False}))
     assert card.performance.incorrect_guesses == 1

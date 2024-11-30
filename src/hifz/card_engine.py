@@ -2,7 +2,7 @@
 
 from hifz.dataserver import DataServer
 from hifz.learning_strategies import CardStrategy
-from hifz.models import Card
+from hifz.models import Card, Feedback
 from hifz.utils import CardSession
 
 
@@ -20,7 +20,8 @@ class CardEngine:
 
     def process_feedback(self, card: Card, **kwargs) -> None:
         """Processes the user feedback."""
-        self.session.process_feedback(card, **kwargs)
+        feedback = Feedback(kwargs)
+        self.session.strategy.process_feedback(card, feedback)
 
     def load_cards(self, file_path: str) -> bool:
         """Loads the cards at file_path to be interacted with."""
