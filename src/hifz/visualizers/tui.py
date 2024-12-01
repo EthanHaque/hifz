@@ -32,6 +32,21 @@ class CardWidget(Static):
 class CardApp(App):
     """Derived class for building TUI."""
 
+    CSS = """
+    Screen {
+        align: center middle;
+    }
+
+    #card {
+        background: blue 50%;
+        border: wide white;
+        width: 40;
+        height: 9;
+        text-align: center;
+        content-align: center middle;
+    }
+    """
+
     BINDINGS = [
         ("j", "flip_card", "Flip Card"),
         ("k", "flip_card", "Flip Card"),
@@ -47,7 +62,7 @@ class CardApp(App):
         """Puts the compotents for the visualizer together."""
         yield Header()
         yield Footer()
-        yield CardWidget()
+        yield CardWidget(id="card")
 
     def action_flip_card(self) -> None:
         """Helper method to flip the shown card."""
