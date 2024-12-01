@@ -17,6 +17,10 @@ class CardStrategy(ABC):
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
 
+    @abstractmethod
+    def get_feedback(self) -> Feedback:
+        """Defines the type of feedback the strategy recieves from the visualizer."""
+
 
 class RandomStrategy(CardStrategy):
     """This class offers a random ordering of the cards."""
@@ -27,10 +31,20 @@ class RandomStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
-        if feedback.get("correct"):
-            card.performance.record_correct()
-        else:
-            card.performance.record_incorrect()
+        card.statistics.update(
+            key="correct",
+            value=1 if feedback.get("correct") else 0,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+        card.statistics.update(
+            key="incorrect",
+            value=0 if feedback.get("correct") else 1,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+
+    def get_feedback(self) -> Feedback:
+        """Gets the type of Feedback this strategy uses."""
+        return Feedback({"correct": bool})
 
 
 class SequentialStrategy(CardStrategy):
@@ -48,10 +62,20 @@ class SequentialStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
-        if feedback.get("correct"):
-            card.performance.record_correct()
-        else:
-            card.performance.record_incorrect()
+        card.statistics.update(
+            key="correct",
+            value=1 if feedback.get("correct") else 0,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+        card.statistics.update(
+            key="incorrect",
+            value=0 if feedback.get("correct") else 1,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+
+    def get_feedback(self) -> Feedback:
+        """Gets the type of Feedback this strategy uses."""
+        return Feedback({"correct": bool})
 
 
 class MasteryStrategy(CardStrategy):
@@ -68,7 +92,7 @@ class MasteryStrategy(CardStrategy):
         start_index = self.index
         while True:
             card = cards[self.index]
-            if card.performance.correct_guesses < threshold:
+            if card.statistics.data.get("correct", 0) < threshold:
                 self.index = (self.index + 1) % len(cards)
                 return card
 
@@ -82,7 +106,17 @@ class MasteryStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
-        if feedback.get("correct"):
-            card.performance.record_correct()
-        else:
-            card.performance.correct_guesses = 0
+        card.statistics.update(
+            key="correct",
+            value=1 if feedback.get("correct") else 0,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+        card.statistics.update(
+            key="incorrect",
+            value=0 if feedback.get("correct") else 1,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+
+    def get_feedback(self) -> Feedback:
+        """Gets the type of Feedback this strategy uses."""
+        return Feedback({"correct": bool})

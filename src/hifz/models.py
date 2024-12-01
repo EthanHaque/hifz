@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from typing import Any
+from collections.abc import Callable
 
 
 @dataclass
@@ -20,19 +21,27 @@ class Feedback:
 
 
 @dataclass
-class CardPerformance:
-    """This class maintains the logic associated with recording card performance."""
+class FeedbackSummary:
+    """Aggregates arbitrary feedback over time."""
 
-    correct_guesses: int = 0
-    incorrect_guesses: int = 0
+    data: dict[str, Any] = field(default_factory=dict)
 
-    def record_correct(self) -> None:
-        """Records a correct card guess."""
-        self.correct_guesses += 1
+    def update(
+        self, key: str, value: Any, update_function: Callable[[Any, Any], Any]
+    ) -> None:
+        """Updates the value associated with a key using the provided update function.
 
-    def record_incorrect(self) -> None:
-        """Records an incorrect card guess."""
-        self.incorrect_guesses += 1
+        Args:
+            key (str): The key in the dictionary.
+            value (Any): The new value to incorporate.
+            update_function (Callable[[Any, Any], Any]): The function to combine existing and new values.
+        """
+        current_value = self.data.get(key, None)
+        self.data[key] = update_function(current_value, value)
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Retrieve a value from the feedback data."""
+        return self.data.get(key, default)
 
 
 @dataclass
@@ -41,4 +50,4 @@ class Card:
 
     front: str
     back: str
-    performance: CardPerformance = field(default_factory=CardPerformance)
+    statistics: FeedbackSummary = field(default_factory=FeedbackSummary)
