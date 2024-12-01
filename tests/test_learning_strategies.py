@@ -1,5 +1,5 @@
 from hifz.learning_strategies import RandomStrategy, SequentialStrategy
-from hifz.models import Card, Feedback
+from hifz.models import Card
 from hifz.utils import CardSession
 
 
