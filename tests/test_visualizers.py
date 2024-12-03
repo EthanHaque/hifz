@@ -3,8 +3,7 @@ from hifz.visualizers.cli import CLICardInterface
 
 
 def test_cli_display_card_front(mocker):
-    """
-    Test display of card front in the CLI.
+    """Test display of card front in the CLI.
 
     Verifies that the `display_card_front` method in CLICardInterface
     correctly outputs the card's front text to the console.
@@ -24,8 +23,7 @@ def test_cli_display_card_front(mocker):
 
 
 def test_cli_display_card_back(mocker):
-    """
-    Test display of card back in the CLI.
+    """Test display of card back in the CLI.
 
     Verifies that the `display_card_back` method in CLICardInterface
     correctly outputs the card's back text to the console.

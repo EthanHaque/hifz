@@ -3,8 +3,7 @@ from hifz.learning_strategies import RandomStrategy, SequentialStrategy
 
 
 def test_load_cards(utf8_test_file):
-    """
-    Test the load_cards method of CardEngine with a UTF-8 encoded file.
+    """Test the load_cards method of CardEngine with a UTF-8 encoded file.
 
     Verifies that cards are successfully loaded from the specified file,
     and that the loaded card count matches the expected number.
@@ -22,8 +21,7 @@ def test_load_cards(utf8_test_file):
 
 
 def test_get_next_card(utf8_test_file):
-    """
-    Test retrieving the next card in the sequence.
+    """Test retrieving the next card in the sequence.
 
     Ensures that, after loading cards, the first card returned by get_next_card()
     matches the expected content, verifying that the sequence works as expected.
@@ -41,8 +39,7 @@ def test_get_next_card(utf8_test_file):
 
 
 def test_process_feedback(utf8_test_file):
-    """
-    Test processing feedback for a card's performance.
+    """Test processing feedback for a card's performance.
 
     Simulates giving correct feedback for a card and verifies that the performance
     metrics (correct guesses) are updated accordingly.
@@ -86,8 +83,7 @@ def test_summary(utf8_test_file):
 
 
 def test_reload_cards(utf8_test_file):
-    """
-    Test reloading cards into the CardEngine.
+    """Test reloading cards into the CardEngine.
 
     Loads cards from a file, then reloads them to ensure that the reload function
     works correctly and maintains the correct number of cards.
@@ -107,8 +103,7 @@ def test_reload_cards(utf8_test_file):
 
 
 def test_engine_unsupported_file_extension(tmp_path_factory):
-    """
-    Test loading a file with an unsupported file extension.
+    """Test loading a file with an unsupported file extension.
 
     Attempts to load a file with an unsupported extension and checks that
     load_cards() returns False, indicating failure to load the file.

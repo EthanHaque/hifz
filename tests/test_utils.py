@@ -1,11 +1,10 @@
 from hifz.learning_strategies import RandomStrategy, SequentialStrategy
-from hifz.models import Card
+from hifz.models import Card, Feedback
 from hifz.utils import CardSession
 
 
 def test_card_session_with_random_strategy(cards: list[Card]):
-    """
-    Test CardSession behavior with RandomStrategy.
+    """Test CardSession behavior with RandomStrategy.
 
     Verifies that the RandomStrategy in CardSession can select any card from
     the list, without going out of bounds.
@@ -23,8 +22,7 @@ def test_card_session_with_random_strategy(cards: list[Card]):
 
 
 def test_card_session_with_sequential_strategy(cards: list[Card]):
-    """
-    Test CardSession behavior with SequentialStrategy.
+    """Test CardSession behavior with SequentialStrategy.
 
     Verifies that the SequentialStrategy in CardSession returns cards in the
     exact order they appear in the provided list.
@@ -43,8 +41,7 @@ def test_card_session_with_sequential_strategy(cards: list[Card]):
 
 
 def test_process_feedback(cards):
-    """
-    Test processing feedback in CardSession with SequentialStrategy.
+    """Test processing feedback in CardSession with SequentialStrategy.
 
     Checks that feedback (correct or incorrect) updates the performance metrics
     of the card appropriately within the session.
@@ -60,8 +57,8 @@ def test_process_feedback(cards):
     session = CardSession(cards, sequential_strategy)
 
     card = session.next_card()
-    session.process_feedback(card, correct=True)
+    session.strategy.process_feedback(card, Feedback({"correct": True}))
 
     assert card.performance.correct_guesses == 1
-    session.process_feedback(card, correct=False)
+    session.strategy.process_feedback(card, Feedback({"correct": False}))
     assert card.performance.incorrect_guesses == 1

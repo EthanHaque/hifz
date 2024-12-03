@@ -1,3 +1,5 @@
+"""This represents the application entrypoint."""
+
 import argparse
 
 from hifz.card_engine import CardEngine
@@ -12,6 +14,7 @@ from hifz.visualizers.cli import CLICardInterface
 
 
 def parse_args() -> argparse.Namespace:
+    """Returns the parsed arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("visualizer", help="Type of visualizer to use.")
     parser.add_argument("filepath", help="Path to card file")
@@ -20,6 +23,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def get_strategy(strategy: str) -> CardStrategy:
+    """Returns the desired strategy."""
     match strategy:
         case "random":
             return RandomStrategy()
@@ -33,6 +37,7 @@ def get_strategy(strategy: str) -> CardStrategy:
 
 
 def get_visualizer(visualizer: str) -> CardInterface:
+    """Returns the desired visualizer."""
     match visualizer:
         case "cli":
             return CLICardInterface()
@@ -48,6 +53,7 @@ def get_visualizer(visualizer: str) -> CardInterface:
 
 
 def main() -> None:
+    """The project entrypoint."""
     args = parse_args()
 
     strategy = get_strategy(args.strategy)
