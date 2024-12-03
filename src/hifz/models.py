@@ -44,10 +44,9 @@ class FeedbackSummary:
         return self.data.get(key, default)
 
 
-@dataclass
+@dataclass(frozen=True, eq=True)
 class Card:
     """This class wraps logic associated with a card."""
 
     front: str
     back: str
-    statistics: FeedbackSummary = field(default_factory=FeedbackSummary)
