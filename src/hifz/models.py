@@ -32,7 +32,12 @@ class Feedback(ABC):
 
 @dataclass
 class SingleSelectBooleanFeedback(Feedback):
-    """Feedback that allows only one boolean field to be True."""
+    """Feedback that allows only one boolean field to be True.
+
+    If there is only a single value, that value may be True or it may be False.
+    However, for any SingleSelectBooleanFeedback that has more than a single
+    option, only one of them may be True.
+    """
 
     def __init__(self, *options: str) -> None:
         """Initialize the feedback with arbitrary boolean fields."""
@@ -41,7 +46,7 @@ class SingleSelectBooleanFeedback(Feedback):
         self.data = {option: False for option in self.options}
 
     def validate(self) -> None:
-        """Ensures only one field is True."""
+        """Ensures typing is correct and only one field is True."""
         super().validate()
         true_count = sum(self.data.values())
         num_options = len(self.options)
