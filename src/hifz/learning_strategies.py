@@ -4,7 +4,7 @@ import random
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 
-from hifz.models import Card, Feedback
+from hifz.models import Card, Feedback, SingleSelectBooleanFeedback
 
 
 class CardStrategy(ABC):
@@ -19,7 +19,7 @@ class CardStrategy(ABC):
         """Processes the feedback associated with the card."""
 
     @abstractmethod
-    def get_feedback(self) -> Feedback:
+    def create_feedback(self) -> Feedback:
         """Defines the type of feedback the strategy recieves from the visualizer."""
 
 
@@ -32,6 +32,7 @@ class RandomStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
+        feedback.validate()
         card.statistics.update(
             key="correct",
             value=1 if feedback.get("correct") else 0,
@@ -43,9 +44,9 @@ class RandomStrategy(CardStrategy):
             update_function=lambda existing, new: (existing or 0) + new,
         )
 
-    def get_feedback(self) -> Feedback:
+    def create_feedback(self) -> Feedback:
         """Gets the type of Feedback this strategy uses."""
-        return Feedback({"correct": bool})
+        return SingleSelectBooleanFeedback("correct")
 
 
 class SequentialStrategy(CardStrategy):
@@ -63,6 +64,7 @@ class SequentialStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
+        feedback.validate()
         card.statistics.update(
             key="correct",
             value=1 if feedback.get("correct") else 0,
@@ -74,9 +76,9 @@ class SequentialStrategy(CardStrategy):
             update_function=lambda existing, new: (existing or 0) + new,
         )
 
-    def get_feedback(self) -> Feedback:
+    def create_feedback(self) -> Feedback:
         """Gets the type of Feedback this strategy uses."""
-        return Feedback({"correct": bool})
+        return SingleSelectBooleanFeedback("correct")
 
 
 class MasteryStrategy(CardStrategy):
@@ -107,6 +109,7 @@ class MasteryStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
+        feedback.validate()
         card.statistics.update(
             key="correct",
             value=1 if feedback.get("correct") else 0,
@@ -118,9 +121,9 @@ class MasteryStrategy(CardStrategy):
             update_function=lambda existing, new: (existing or 0) + new,
         )
 
-    def get_feedback(self) -> Feedback:
+    def create_feedback(self) -> Feedback:
         """Gets the type of Feedback this strategy uses."""
-        return Feedback({"correct": bool})
+        return SingleSelectBooleanFeedback("correct")
 
 
 class SimpleSpacedRepetition(CardStrategy):
@@ -154,6 +157,7 @@ class SimpleSpacedRepetition(CardStrategy):
             card (Card): The card being reviewed.
             feedback (Feedback): The feedback provided by the user.
         """
+        feedback.validate()
         card.statistics.update(
             key="correct",
             value=1 if feedback.get("correct") else 0,
@@ -194,6 +198,6 @@ class SimpleSpacedRepetition(CardStrategy):
             key="due", value=next_due, update_function=lambda _, new: new
         )
 
-    def get_feedback(self) -> Feedback:
+    def create_feedback(self) -> Feedback:
         """Defines the type of feedback this strategy uses."""
-        return Feedback({"correct": bool})
+        return SingleSelectBooleanFeedback("correct")

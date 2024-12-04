@@ -24,7 +24,7 @@ class CardEngine:
 
     def get_feedback(self) -> Feedback:
         """Gets the feedback type for the particular strategy used."""
-        return self.session.strategy.get_feedback()
+        return self.session.strategy.create_feedback()
 
     def load_cards(self, file_path: str) -> bool:
         """Loads the cards at file_path to be interacted with."""

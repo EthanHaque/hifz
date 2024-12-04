@@ -57,7 +57,7 @@ def test_process_feedback(cards):
     session = CardSession(cards, strategy)
 
     card = session.next_card()
-    feedback = strategy.get_feedback()
+    feedback = strategy.create_feedback()
     feedback.data["correct"] = True
     session.strategy.process_feedback(card, feedback)
 
