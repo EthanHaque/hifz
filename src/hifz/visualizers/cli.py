@@ -1,7 +1,7 @@
 """This represents the command-line interface."""
 
 from hifz.card_engine import CardEngine
-from hifz.models import Card
+from hifz.models import Card, Feedback, SingleSelectBooleanFeedback
 from hifz.visualizers import CardInterface
 
 
@@ -19,6 +19,47 @@ class CLICardInterface(CardInterface):
     def notify(self, message: str) -> None:
         """Notifies with message."""
         print(message)  # noqa: T201
+
+    def get_user_feedback(self, feedback: Feedback) -> Feedback:
+        """Dynamically prompts for feedback based on Feedback structure."""
+        metadata = feedback.get_metadata()
+
+        match feedback:
+            case SingleSelectBooleanFeedback():
+                num_options = len(feedback.options)
+
+                if num_options == 1:
+                    field_name = next(iter(metadata.keys()))
+                    value = input(f"{field_name}? (y/n): ").strip().lower()
+                    feedback.data[field_name] = value in ["y", "yes", "true"]
+                else:
+                    print("Choose one of the following options:")  # noqa: T201
+                    for idx, option in enumerate(feedback.options, 1):
+                        print(f"{idx}: {option}")  # noqa: T201
+                    try:
+                        choice = int(
+                            input(
+                                "Enter the number corresponding to your choice: "
+                            ).strip()
+                        )
+                        if 1 <= choice <= num_options:
+                            selected_option = feedback.options[choice - 1]
+                            feedback.data = {
+                                option: option == selected_option
+                                for option in feedback.options
+                            }
+                        else:
+                            raise ValueError
+                    except (ValueError, IndexError):
+                        print("Invalid choice. Please try again.")  # noqa: T201
+                        return self.get_user_feedback(feedback)
+
+            case _:
+                msg = f"CLI does not support rendering feedback of type {type(feedback).__name__}."
+                raise NotImplementedError(msg)
+
+        feedback.validate()
+        return feedback
 
     def run_session(self, engine: CardEngine) -> None:
         """Runs the session."""
@@ -52,5 +93,6 @@ class CLICardInterface(CardInterface):
 
             self.display_card_back(card)
 
-            correct = input("Did you get it correct? (y/n): ").strip().lower() == "y"
-            engine.process_feedback(card, correct=correct)
+            feedback = engine.get_feedback()
+            user_feedback = self.get_user_feedback(feedback)
+            engine.process_feedback(card, user_feedback)
