@@ -51,7 +51,7 @@ class SingleSelectBooleanFeedback(Feedback):
         if true_count != 1 and num_options > 1:
             msg = "Only one field can be True."
             raise ValueError(msg)
-        if (true_count != 0 or true_count != 1) and num_options == 1:
+        if (true_count != 0 and true_count != 1) and num_options == 1:
             msg = "There was only a single option, but we counted an incorrect number of responses."
             raise ValueError(msg)
 
