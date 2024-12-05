@@ -2,8 +2,9 @@
 
 import random
 from abc import ABC, abstractmethod
+from datetime import datetime, timedelta
 
-from hifz.models import Card, Feedback
+from hifz.models import BinaryFeedback, Card, Feedback
 
 
 class CardStrategy(ABC):
@@ -17,6 +18,10 @@ class CardStrategy(ABC):
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
 
+    @abstractmethod
+    def create_feedback(self) -> Feedback:
+        """Defines the type of feedback the strategy recieves from the visualizer."""
+
 
 class RandomStrategy(CardStrategy):
     """This class offers a random ordering of the cards."""
@@ -27,10 +32,21 @@ class RandomStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
-        if feedback.get("correct"):
-            card.performance.record_correct()
-        else:
-            card.performance.record_incorrect()
+        feedback.validate()
+        card.statistics.update(
+            key="correct",
+            value=1 if feedback.get("correct") else 0,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+        card.statistics.update(
+            key="incorrect",
+            value=0 if feedback.get("correct") else 1,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+
+    def create_feedback(self) -> Feedback:
+        """Gets the type of Feedback this strategy uses."""
+        return BinaryFeedback("correct")
 
 
 class SequentialStrategy(CardStrategy):
@@ -48,10 +64,21 @@ class SequentialStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
-        if feedback.get("correct"):
-            card.performance.record_correct()
-        else:
-            card.performance.record_incorrect()
+        feedback.validate()
+        card.statistics.update(
+            key="correct",
+            value=1 if feedback.get("correct") else 0,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+        card.statistics.update(
+            key="incorrect",
+            value=0 if feedback.get("correct") else 1,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+
+    def create_feedback(self) -> Feedback:
+        """Gets the type of Feedback this strategy uses."""
+        return BinaryFeedback("correct")
 
 
 class MasteryStrategy(CardStrategy):
@@ -68,7 +95,7 @@ class MasteryStrategy(CardStrategy):
         start_index = self.index
         while True:
             card = cards[self.index]
-            if card.performance.correct_guesses < threshold:
+            if card.statistics.data.get("correct", 0) < threshold:
                 self.index = (self.index + 1) % len(cards)
                 return card
 
@@ -82,7 +109,95 @@ class MasteryStrategy(CardStrategy):
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
+        feedback.validate()
+        card.statistics.update(
+            key="correct",
+            value=1 if feedback.get("correct") else 0,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+        card.statistics.update(
+            key="incorrect",
+            value=0 if feedback.get("correct") else 1,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+
+    def create_feedback(self) -> Feedback:
+        """Gets the type of Feedback this strategy uses."""
+        return BinaryFeedback("correct")
+
+
+class SimpleSpacedRepetition(CardStrategy):
+    """This class implements a simple spaced repetition algorithm."""
+
+    def get_next_card(self, cards: list[Card]) -> Card:
+        """Returns the next card to review based on due time.
+
+        Args:
+            cards (List[Card]): List of all available cards.
+
+        Returns:
+            Card: The next card to review.
+        """
+        now = datetime.now()
+        sorted_cards = sorted(
+            cards, key=lambda card: card.statistics.data.get("due", now)
+        )
+
+        for card in sorted_cards:
+            due = card.statistics.data.get("due", now)
+            if due <= now:
+                return card
+
+        return random.choice(cards)
+
+    def process_feedback(self, card: Card, feedback: Feedback) -> None:
+        """Process feedback and schedule the next review.
+
+        Args:
+            card (Card): The card being reviewed.
+            feedback (Feedback): The feedback provided by the user.
+        """
+        feedback.validate()
+        card.statistics.update(
+            key="correct",
+            value=1 if feedback.get("correct") else 0,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+        card.statistics.update(
+            key="incorrect",
+            value=0 if feedback.get("correct") else 1,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+
+        ease_factor = card.statistics.data.get("ease_factor", 2.5)
+
         if feedback.get("correct"):
-            card.performance.record_correct()
+            interval = card.statistics.data.get("interval", 1)
+            card.statistics.update(
+                key="interval",
+                value=interval * ease_factor,
+                update_function=lambda existing, new: max(existing or 1, new),
+            )
+            card.statistics.update(
+                key="ease_factor",
+                value=ease_factor + 0.1,
+                update_function=lambda _, new: min(new, 3.0),
+            )
         else:
-            card.performance.correct_guesses = 0
+            card.statistics.update(
+                key="interval", value=1, update_function=lambda _, new: new
+            )
+            card.statistics.update(
+                key="ease_factor",
+                value=max(ease_factor - 0.2, 1.3),
+                update_function=lambda _, new: new,
+            )
+
+        next_due = datetime.now() + timedelta(days=card.statistics.data["interval"])
+        card.statistics.update(
+            key="due", value=next_due, update_function=lambda _, new: new
+        )
+
+    def create_feedback(self) -> Feedback:
+        """Defines the type of feedback this strategy uses."""
+        return BinaryFeedback("correct")

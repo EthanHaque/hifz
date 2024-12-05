@@ -18,10 +18,13 @@ class CardEngine:
         """Returns the next card."""
         return self.session.next_card()
 
-    def process_feedback(self, card: Card, **kwargs) -> None:
+    def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the user feedback."""
-        feedback = Feedback(kwargs)
         self.session.strategy.process_feedback(card, feedback)
+
+    def get_feedback(self) -> Feedback:
+        """Gets the feedback type for the particular strategy used."""
+        return self.session.strategy.create_feedback()
 
     def load_cards(self, file_path: str) -> bool:
         """Loads the cards at file_path to be interacted with."""
