@@ -7,8 +7,8 @@ from typing import Any
 
 from hifz.models import BinaryFeedback, Card, Feedback
 
-STRATEGY_NAME_TO_CLASS = {}
-STRATEGY_CLASS_TO_NAME = {}
+STRATEGY_NAME_TO_CLASS: dict[str, type["CardStrategy"]] = {}
+STRATEGY_CLASS_TO_NAME: dict[type["CardStrategy"], str] = {}
 
 
 def register_strategy(name: str):

@@ -1,6 +1,7 @@
 import pytest
+
 from hifz.card_engine import CardEngine
-from hifz.learning_strategies import RandomStrategy, SequentialStrategy, MasteryStrategy
+from hifz.learning_strategies import MasteryStrategy, RandomStrategy, SequentialStrategy
 
 
 def test_load_cards(utf8_test_file):

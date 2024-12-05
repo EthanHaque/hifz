@@ -5,7 +5,6 @@ from datetime import datetime
 from pathlib import Path
 
 from hifz.learning_strategies import (
-    STRATEGY_CLASS_TO_NAME,
     STRATEGY_NAME_TO_CLASS,
     CardStrategy,
 )

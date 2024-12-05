@@ -1,6 +1,8 @@
 import json
+
 import pytest
-from hifz.learning_strategies import RandomStrategy, SequentialStrategy, MasteryStrategy
+
+from hifz.learning_strategies import MasteryStrategy, RandomStrategy, SequentialStrategy
 from hifz.models import Card
 from hifz.utils import CardSession
 
