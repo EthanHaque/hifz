@@ -14,12 +14,12 @@ from hifz.visualizers.cli import CLICardInterface
 from hifz.visualizers.tui import TUICardInterface
 
 
-def parse_args() -> argparse.Namespace:
+def get_args() -> argparse.Namespace:
     """Returns the parsed arguments."""
-    parser = argparse.ArgumentParser()
-    parser.add_argument("visualizer", help="Type of visualizer to use.")
-    parser.add_argument("filepath", help="Path to card file")
-    parser.add_argument("strategy", help="Learning strategy")
+    parser = argparse.ArgumentParser(description="A flashcard memorization program.")
+    parser.add_argument("visualizer", help="The type of visualizer to use.")
+    parser.add_argument("file_path", help="The file path of desired card collection.")
+    parser.add_argument("strategy", help="The card memorization strategy to use.")
     return parser.parse_args()
 
 
@@ -57,13 +57,13 @@ def get_visualizer(visualizer: str) -> CardInterface:
 
 def main() -> None:
     """The project entrypoint."""
-    args = parse_args()
+    args = get_args()
 
     strategy = get_strategy(args.strategy)
     interface = get_visualizer(args.visualizer)
 
     engine = CardEngine(strategy)
-    engine.load_cards(args.filepath)
+    engine.load_cards(args.file_path)
 
     interface.run_session(engine)
 
