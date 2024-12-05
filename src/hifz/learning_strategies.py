@@ -4,7 +4,7 @@ import random
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 
-from hifz.models import Card, Feedback, SingleSelectBooleanFeedback
+from hifz.models import BinaryFeedback, Card, Feedback
 
 
 class CardStrategy(ABC):
@@ -46,7 +46,7 @@ class RandomStrategy(CardStrategy):
 
     def create_feedback(self) -> Feedback:
         """Gets the type of Feedback this strategy uses."""
-        return SingleSelectBooleanFeedback("correct")
+        return BinaryFeedback("correct")
 
 
 class SequentialStrategy(CardStrategy):
@@ -78,7 +78,7 @@ class SequentialStrategy(CardStrategy):
 
     def create_feedback(self) -> Feedback:
         """Gets the type of Feedback this strategy uses."""
-        return SingleSelectBooleanFeedback("correct")
+        return BinaryFeedback("correct")
 
 
 class MasteryStrategy(CardStrategy):
@@ -123,7 +123,7 @@ class MasteryStrategy(CardStrategy):
 
     def create_feedback(self) -> Feedback:
         """Gets the type of Feedback this strategy uses."""
-        return SingleSelectBooleanFeedback("correct")
+        return BinaryFeedback("correct")
 
 
 class SimpleSpacedRepetition(CardStrategy):
@@ -200,4 +200,4 @@ class SimpleSpacedRepetition(CardStrategy):
 
     def create_feedback(self) -> Feedback:
         """Defines the type of feedback this strategy uses."""
-        return SingleSelectBooleanFeedback("correct")
+        return BinaryFeedback("correct")
