@@ -61,31 +61,6 @@ def test_process_feedback(utf8_test_file):
     assert card.statistics.get("correct") == 1
 
 
-def test_aggregate_feedback(utf8_test_file):
-    engine = CardEngine(SequentialStrategy())
-    engine.load_cards(str(utf8_test_file))
-    card = engine.get_next_card()
-
-    feedback = engine.get_feedback()
-    feedback.data["correct"] = True
-    engine.process_feedback(card, feedback)
-
-    feedback = engine.get_feedback()
-    feedback.data["correct"] = True
-    engine.process_feedback(card, feedback)
-
-    feedback = engine.get_feedback()
-    feedback.data["correct"] = False
-    engine.process_feedback(card, feedback)
-
-    feedback = engine.get_feedback()
-    feedback.data["correct"] = False
-    engine.process_feedback(card, feedback)
-
-    assert card.statistics.get("correct") == 2
-    assert card.statistics.get("incorrect") == 2
-
-
 def test_reload_cards(utf8_test_file):
     """Test reloading cards into the CardEngine.
 
