@@ -7,6 +7,7 @@ from PyQt6.QtCore import Qt  # type: ignore[import-not-found]
 from PyQt6.QtWidgets import (  # type: ignore[import-not-found]
     QApplication,
     QFileDialog,
+    QHBoxLayout,
     QLabel,
     QMessageBox,
     QPushButton,
@@ -79,22 +80,28 @@ class GUICardInterface(CardInterface):
         """Adds buttons for binary feedback options."""
         field_name = feedback.field_name
 
-        yes_button = QPushButton(f"✅ {field_name}")
+        binary_layout = QHBoxLayout()
+
+        yes_button = QPushButton(f"✅ Yes ({field_name})")
         yes_button.clicked.connect(
             lambda: self.submit_feedback(feedback, {field_name: True})
         )
-        self.layout.addWidget(yes_button)
+        binary_layout.addWidget(yes_button)
 
-        no_button = QPushButton(f"❎ {field_name}")
+        no_button = QPushButton(f"❎ No ({field_name})")
         no_button.clicked.connect(
             lambda: self.submit_feedback(feedback, {field_name: False})
         )
-        self.layout.addWidget(no_button)
+        binary_layout.addWidget(no_button)
+
+        self.layout.addLayout(binary_layout)
 
     def add_multi_select_feedback_buttons(
         self, feedback: SingleSelectBooleanFeedback
     ) -> None:
         """Adds buttons for multiple selectable feedback options."""
+        multi_layout = QHBoxLayout()
+
         for option in feedback.options:
             button = QPushButton(option)
             button.clicked.connect(
@@ -102,7 +109,9 @@ class GUICardInterface(CardInterface):
                     feedback, {key: key == opt for key in feedback.options}
                 )
             )
-            self.layout.addWidget(button)
+            multi_layout.addWidget(button)
+
+        self.layout.addLayout(multi_layout)
 
     def add_navigation_buttons(self) -> None:
         """Adds static navigation buttons (e.g., Flip, Reload)."""
