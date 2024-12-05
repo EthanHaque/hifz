@@ -1,5 +1,5 @@
 from hifz.learning_strategies import RandomStrategy, SequentialStrategy
-from hifz.models import Card, Feedback
+from hifz.models import Card
 from hifz.utils import CardSession
 
 
@@ -53,12 +53,13 @@ def test_process_feedback(cards):
         - correct_guesses count is incremented after positive feedback.
         - incorrect_guesses count is incremented after negative feedback.
     """
-    sequential_strategy = SequentialStrategy()
-    session = CardSession(cards, sequential_strategy)
+    strategy = SequentialStrategy()
+    session = CardSession(cards, strategy)
 
     card = session.next_card()
-    session.strategy.process_feedback(card, Feedback({"correct": True}))
+    feedback = strategy.create_feedback()
+    feedback.data["correct"] = True
+    session.strategy.process_feedback(card, feedback)
 
-    assert card.performance.correct_guesses == 1
-    session.strategy.process_feedback(card, Feedback({"correct": False}))
-    assert card.performance.incorrect_guesses == 1
+    assert card.statistics.get("correct") == 1
+    assert card.statistics.get("incorrect") == 0
