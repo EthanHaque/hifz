@@ -58,30 +58,6 @@ def test_process_feedback(utf8_test_file):
     assert card.performance.correct_guesses == 1
 
 
-def test_summary(utf8_test_file):
-    """
-    Test session statistics.
-
-    Simulates giving correct feedback for five cards followed by incorrect feedback
-    for three cards and checks that the summary output is as desired.
-
-    Args:
-        utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
-
-    Asserts:
-        - The summary statistic matches "Correct: 5, Incorrect: 3."
-    """
-    engine = CardEngine(SequentialStrategy())
-    engine.load_cards(str(utf8_test_file))
-    for _ in range(5):
-        card = engine.get_next_card()
-        engine.process_feedback(card, correct=True)
-    for _ in range(3):
-        card = engine.get_next_card()
-        engine.process_feedback(card, correct=False)
-    assert engine.session.get_summary() == "Correct: 5, Incorrect: 3."
-
-
 def test_reload_cards(utf8_test_file):
     """Test reloading cards into the CardEngine.
 
@@ -118,3 +94,24 @@ def test_engine_unsupported_file_extension(tmp_path_factory):
     unsupported_file = tmp_path_factory.mktemp("data") / "unsupported.unsupported"
     unsupported_file.write_text("This is an unsupported file.")
     assert engine.load_cards(str(unsupported_file)) is False
+
+
+def test_summary(utf8_test_file):
+    """
+    Test session statistics.
+    Simulates giving correct feedback for five cards followed by incorrect feedback
+    for three cards and checks that the summary output is as desired.
+    Args:
+        utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
+    Asserts:
+        - The summary statistic matches "Correct: 5, Incorrect: 3."
+    """
+    engine = CardEngine(SequentialStrategy())
+    engine.load_cards(str(utf8_test_file))
+    for _ in range(5):
+        card = engine.get_next_card()
+        engine.process_feedback(card, correct=True)
+    for _ in range(3):
+        card = engine.get_next_card()
+        engine.process_feedback(card, correct=False)
+    assert engine.session.statistics.get_summary() == "Correct: 5, Incorrect: 3."

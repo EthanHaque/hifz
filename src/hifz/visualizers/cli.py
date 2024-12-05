@@ -55,5 +55,6 @@ class CLICardInterface(CardInterface):
             correct = input("Did you get it correct? (y/n): ").strip().lower() == "y"
             engine.process_feedback(card, correct=correct)
 
+        # Print summary of session statistics
         self.notify("-" * 69 + "\nSession Summary:")
-        self.notify(engine.get_summary())
+        self.notify(engine.session.statistics.get_summary())

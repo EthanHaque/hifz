@@ -22,6 +22,7 @@ class CardEngine:
         """Processes the user feedback."""
         feedback = Feedback(kwargs)
         self.session.strategy.process_feedback(card, feedback)
+        self.session.statistics.process_feedback(feedback)
 
     def load_cards(self, file_path: str) -> bool:
         """Loads the cards at file_path to be interacted with."""
@@ -36,6 +37,3 @@ class CardEngine:
     def reload_cards(self, file_path: str) -> bool:
         """Reloads the cards at file_path."""
         return self.load_cards(file_path)
-
-    def get_summary(self) -> str:
-        return self.session.get_summary()

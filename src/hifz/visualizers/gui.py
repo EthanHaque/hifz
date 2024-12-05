@@ -101,6 +101,7 @@ class GUICardInterface(CardInterface):
             self.display_card_front(self.current_card)
 
     def reload_cards(self) -> None:
+        """Reloads the cards."""
         new_file_path = QFileDialog.getOpenFileName(
             self.window, "Open File", "{$HOME}"
         )[0]
@@ -111,5 +112,6 @@ class GUICardInterface(CardInterface):
         self.show_next_card()
 
     def end_session(self) -> None:
-        self.notify(self.engine.get_summary())
+        """Ends the session and shows the user the summary statistics."""
+        self.notify(self.engine.session.statistics.get_summary())
         self.window.close()
