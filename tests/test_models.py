@@ -134,3 +134,86 @@ def test_feedback_summary_with_binary_feedback():
     assert (
         card.statistics.get("incorrect") == 1
     ), "FeedbackSummary did not aggregate 'incorrect' feedback correctly."
+
+
+def test_card_serialization():
+    """Test that a Card object serializes correctly."""
+    card = Card(front="Front text", back="Back text")
+    card.statistics.update("correct", 2, lambda existing, new: (existing or 0) + new)
+    card.statistics.update("incorrect", 1, lambda existing, new: (existing or 0) + new)
+
+    serialized_card = card.to_dict()
+
+    expected_data = {
+        "front": "Front text",
+        "back": "Back text",
+        "statistics": {"correct": 2, "incorrect": 1},
+    }
+
+    assert serialized_card == expected_data, "Card serialization failed."
+
+
+def test_card_deserialization():
+    """Test that a Card object deserializes correctly."""
+    card_data = {
+        "front": "Front text",
+        "back": "Back text",
+        "statistics": {"correct": 2, "incorrect": 1},
+    }
+
+    card = Card.from_dict(card_data)
+
+    assert card.front == "Front text", "Card deserialization failed for 'front'."
+    assert card.back == "Back text", "Card deserialization failed for 'back'."
+    assert (
+        card.statistics.get("correct") == 2
+    ), "Card deserialization failed for 'correct' statistics."
+    assert (
+        card.statistics.get("incorrect") == 1
+    ), "Card deserialization failed for 'incorrect' statistics."
+
+
+def test_card_serialization_round_trip():
+    """Test that a Card object serializes and deserializes correctly."""
+    original_card = Card(front="Front text", back="Back text")
+    original_card.statistics.update(
+        "correct", 3, lambda existing, new: (existing or 0) + new
+    )
+    original_card.statistics.update(
+        "incorrect", 2, lambda existing, new: (existing or 0) + new
+    )
+
+    serialized_card = original_card.to_dict()
+    deserialized_card = Card.from_dict(serialized_card)
+
+    assert (
+        deserialized_card.front == original_card.front
+    ), "Round trip serialization failed for 'front'."
+    assert (
+        deserialized_card.back == original_card.back
+    ), "Round trip serialization failed for 'back'."
+    assert deserialized_card.statistics.get("correct") == original_card.statistics.get(
+        "correct"
+    ), "Round trip serialization failed for 'correct' statistics."
+    assert deserialized_card.statistics.get(
+        "incorrect"
+    ) == original_card.statistics.get(
+        "incorrect"
+    ), "Round trip serialization failed for 'incorrect' statistics."
+
+
+def test_feedback_summary_with_single_select_feedback():
+    """Test FeedbackSummary updates correctly with SingleSelectBooleanFeedback."""
+    card = Card(front="Test Front", back="Test Back")
+    feedback = SingleSelectBooleanFeedback("easy", "medium", "hard")
+
+    feedback.data["medium"] = True
+    card.statistics.update(
+        "difficulty",
+        "medium" if feedback.data["medium"] else "unknown",
+        lambda _, new: new,
+    )
+
+    assert (
+        card.statistics.get("difficulty") == "medium"
+    ), "FeedbackSummary did not update correctly with SingleSelectBooleanFeedback."

@@ -110,3 +110,18 @@ class Card:
     front: str
     back: str
     statistics: FeedbackSummary = field(default_factory=FeedbackSummary)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Converts the card and its statistics to a dictionary."""
+        return {
+            "front": self.front,
+            "back": self.back,
+            "statistics": self.statistics.data,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Card":
+        """Creates a Card instance from a dictionary."""
+        card = cls(front=data["front"], back=data["back"])
+        card.statistics.data = data.get("statistics", {})
+        return card
