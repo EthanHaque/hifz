@@ -3,12 +3,30 @@
 import random
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
+from typing import Any
 
 from hifz.models import BinaryFeedback, Card, Feedback
 
+STRATEGY_NAME_TO_CLASS = {}
+STRATEGY_CLASS_TO_NAME = {}
+
+
+def register_strategy(name: str):
+    """Decorator to register a strategy with a two-way mapping."""
+
+    def decorator(cls):
+        if name in STRATEGY_NAME_TO_CLASS or cls in STRATEGY_CLASS_TO_NAME:
+            msg = f"Strategy name '{name}' or class '{cls.__name__}' is already registered."
+            raise ValueError(msg)
+        STRATEGY_NAME_TO_CLASS[name] = cls
+        STRATEGY_CLASS_TO_NAME[cls] = name
+        return cls
+
+    return decorator
+
 
 class CardStrategy(ABC):
-    """This ABC offers the interface associated with card display order strategy."""
+    """Interface for card memorization strategies."""
 
     @abstractmethod
     def get_next_card(self, cards: list[Card]) -> Card:
@@ -20,9 +38,59 @@ class CardStrategy(ABC):
 
     @abstractmethod
     def create_feedback(self) -> Feedback:
-        """Defines the type of feedback the strategy recieves from the visualizer."""
+        """Defines the type of feedback the strategy uses."""
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serializes the strategy state."""
+        strategy_name = STRATEGY_CLASS_TO_NAME.get(type(self))
+        if not strategy_name:
+            msg = f"Strategy class {type(self).__name__} is not registered."
+            raise ValueError(msg)
+        return {
+            "type": strategy_name,
+            "state": self._serialize_state(),
+        }
+
+    def _serialize_state(self) -> dict[str, Any]:
+        """Hook for subclasses to serialize additional state."""
+        return {}
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "CardStrategy":
+        """Restores the strategy state."""
+        if "type" not in data:
+            msg = "Missing 'type' in serialized data."
+            raise KeyError(msg)
+        if "state" not in data:
+            msg = "Missing 'state' in serialized data."
+            raise KeyError(msg)
+
+        strategy_name = data["type"]
+        strategy_cls = STRATEGY_NAME_TO_CLASS.get(strategy_name)
+        if not strategy_cls:
+            msg = f"Unknown strategy name: {strategy_name}"
+            raise ValueError(msg)
+
+        return strategy_cls._deserialize_state(data["state"])
+
+    @classmethod
+    def _deserialize_state(cls, state: dict[str, Any]) -> "CardStrategy":
+        """Hook for subclasses to deserialize additional state."""
+        _ = state
+        return cls()
+
+    def __repr__(self) -> str:
+        """Machine-readable representation of the strategy."""
+        return f"<{self.__class__.__name__} {self._serialize_state()}>"
+
+    def __str__(self) -> str:
+        """User-friendly string representation of the strategy."""
+        state = self._serialize_state()
+        state_details = ", ".join(f"{key}={value}" for key, value in state.items())
+        return f"{self.__class__.__name__}({state_details})"
 
 
+@register_strategy("RandomStrategy")
 class RandomStrategy(CardStrategy):
     """This class offers a random ordering of the cards."""
 
@@ -49,6 +117,7 @@ class RandomStrategy(CardStrategy):
         return BinaryFeedback("correct")
 
 
+@register_strategy("SequentialStrategy")
 class SequentialStrategy(CardStrategy):
     """This class represents the logic associated with providing a sequential ordering of cards."""
 
@@ -81,6 +150,7 @@ class SequentialStrategy(CardStrategy):
         return BinaryFeedback("correct")
 
 
+@register_strategy("MasteryStrategy")
 class MasteryStrategy(CardStrategy):
     """This class maintains the logic associated with a card ordering for mastery learning."""
 
@@ -132,7 +202,19 @@ class MasteryStrategy(CardStrategy):
         """Gets the type of Feedback this strategy uses."""
         return BinaryFeedback("correct")
 
+    def _serialize_state(self) -> dict[str, Any]:
+        """Serializes the strategy state."""
+        return {"index": self.index, "threshold": self.threshold}
 
+    @classmethod
+    def _deserialize_state(cls, data: dict[str, Any]) -> "MasteryStrategy":
+        """Restores the strategy state."""
+        instance = cls(threshold=data.get("threshold", 5))
+        instance.index = data.get("index", 0)
+        return instance
+
+
+@register_strategy("SimpleSpacedRepetitionStrategy")
 class SimpleSpacedRepetitionStrategy(CardStrategy):
     """This class implements a simple spaced repetition algorithm."""
 
