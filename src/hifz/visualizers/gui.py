@@ -1,6 +1,7 @@
 """This represents the application graphical user interface."""
 
 import sys
+from typing import Any
 
 from PyQt6.QtCore import Qt  # type: ignore[import-not-found]
 from PyQt6.QtWidgets import (  # type: ignore[import-not-found]
@@ -14,7 +15,7 @@ from PyQt6.QtWidgets import (  # type: ignore[import-not-found]
 )
 
 from hifz.card_engine import CardEngine
-from hifz.models import Card, Feedback, SingleSelectBooleanFeedback, BinaryFeedback
+from hifz.models import BinaryFeedback, Card, Feedback, SingleSelectBooleanFeedback
 from hifz.visualizers import CardInterface
 
 
@@ -113,7 +114,7 @@ class GUICardInterface(CardInterface):
         reload_button.clicked.connect(self.reload_cards)
         self.layout.addWidget(reload_button)
 
-    def submit_feedback(self, feedback: Feedback, updated_data: dict) -> None:
+    def submit_feedback(self, feedback: Feedback, updated_data: dict[str, Any]) -> None:
         """Submits the user feedback."""
         feedback.data = updated_data
         try:
