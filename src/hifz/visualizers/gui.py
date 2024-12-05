@@ -152,7 +152,7 @@ class GUICardInterface(CardInterface):
         self.engine = engine
         self.show_next_card()
         self.window.show()
-        sys.exit(self.app.exec())
+        self.app.exec()
 
     def show_next_card(self) -> None:
         """Displays the next card."""

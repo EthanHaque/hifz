@@ -292,3 +292,41 @@ def test_spaced_repetition_selects_random_for_no_due_cards():
         card1,
         card2,
     ], "SimpleSpacedRepetitionStrategy did not select randomly for non-due cards."
+
+
+def test_mastery_strategy_serialization():
+    """Test MasteryStrategy state serialization and deserialization."""
+    mastery_strategy = MasteryStrategy(threshold=10)
+    mastery_strategy.index = 3
+
+    serialized = mastery_strategy.to_dict()
+    assert serialized == {
+        "type": "MasteryStrategy",
+        "state": {
+            "index": 3,
+            "threshold": 10,
+        },
+    }, "MasteryStrategy did not serialize correctly."
+
+    deserialized = MasteryStrategy.from_dict(serialized)
+    assert isinstance(
+        deserialized, MasteryStrategy
+    ), "Deserialized object is not of type MasteryStrategy."
+    assert (
+        deserialized.threshold == 10
+    ), "Deserialized MasteryStrategy has incorrect 'threshold'."
+    assert (
+        deserialized.index == 3
+    ), "Deserialized MasteryStrategy has incorrect 'index'."
+
+
+def test_spaced_repetition_strategy_serialization():
+    """Test SimpleSpacedRepetitionStrategy state serialization and deserialization."""
+    spaced_strategy = SimpleSpacedRepetitionStrategy()
+
+    serialized = spaced_strategy.to_dict()
+    deserialized = SimpleSpacedRepetitionStrategy.from_dict(serialized)
+
+    assert isinstance(
+        deserialized, SimpleSpacedRepetitionStrategy
+    ), "Failed to deserialize strategy correctly."

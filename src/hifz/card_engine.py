@@ -1,5 +1,7 @@
 """The card engine maintains the logic associated with user interaction and content production."""
 
+from pathlib import Path
+
 from hifz.dataserver import DataServer
 from hifz.learning_strategies import CardStrategy
 from hifz.models import Card, Feedback
@@ -39,3 +41,27 @@ class CardEngine:
     def reload_cards(self, file_path: str) -> bool:
         """Reloads the cards at file_path."""
         return self.load_cards(file_path)
+
+    def save_progress(self, file_path: Path) -> None:
+        """Saves the current session state."""
+        self.session.save_progress(file_path)
+
+    def load_progress(self, file_path: Path) -> None:
+        """Loads a session from saved progress."""
+        self.session = CardSession.load_progress(file_path)
+        self.strategy = self.session.strategy  # TODO: bad hack.
+
+    def __str__(self) -> str:
+        """Human-readable representation of the CardEngine."""
+        return (
+            f"{self.__class__.__name__}(strategy={self.strategy.__class__.__name__}, "
+            f"cards_loaded={len(self.session.cards) if hasattr(self, 'session') else 0})"
+        )
+
+    def __repr__(self) -> str:
+        """Detailed technical representation of the CardEngine."""
+        return (
+            f"{self.__class__.__name__}("
+            f"strategy={self.strategy!r}, "
+            f"session={repr(self.session) if hasattr(self, 'session') else None})"
+        )
