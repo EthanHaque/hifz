@@ -2,8 +2,8 @@ import pytest
 
 from hifz.models import (
     BinaryFeedback,
-    SingleSelectBooleanFeedback,
     Card,
+    SingleSelectBooleanFeedback,
 )
 
 

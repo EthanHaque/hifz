@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
 from hifz.learning_strategies import (
+    MasteryStrategy,
     RandomStrategy,
     SequentialStrategy,
-    MasteryStrategy,
     SimpleSpacedRepetitionStrategy,
 )
 from hifz.models import Card
