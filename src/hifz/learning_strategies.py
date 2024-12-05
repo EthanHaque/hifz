@@ -84,40 +84,47 @@ class SequentialStrategy(CardStrategy):
 class MasteryStrategy(CardStrategy):
     """This class maintains the logic associated with a card ordering for mastery learning."""
 
-    def __init__(self) -> None:
-        """Instantiates the Mastery Strategy."""
+    def __init__(self, threshold: int = 5) -> None:
+        """Instantiates the Mastery Strategy with a configurable mastery threshold."""
         self.index = 0
+        self.threshold = threshold
 
     def get_next_card(self, cards: list[Card]) -> Card:
-        """Returns the next card."""
-        threshold = 5
+        """Returns the next card, prioritizing those below the mastery threshold."""
+        low_mastery_cards = [
+            card
+            for card in cards
+            if card.statistics.data.get("correct", 0) < self.threshold
+        ]
 
-        start_index = self.index
-        while True:
-            card = cards[self.index]
-            if card.statistics.data.get("correct", 0) < threshold:
-                self.index = (self.index + 1) % len(cards)
-                return card
-
+        if low_mastery_cards:
+            card = low_mastery_cards[self.index % len(low_mastery_cards)]
+            self.index = (self.index + 1) % len(low_mastery_cards)
+        else:
+            card = cards[self.index % len(cards)]
             self.index = (self.index + 1) % len(cards)
-
-            if self.index == start_index:
-                break
-
-        self.index = (self.index + 1) % len(cards)
-        return cards[self.index]
+        return card
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
         """Processes the feedback associated with the card."""
         feedback.validate()
+
+        if feedback.get("correct"):
+            card.statistics.update(
+                key="correct",
+                value=1,
+                update_function=lambda existing, new: (existing or 0) + new,
+            )
+        else:
+            card.statistics.update(
+                key="correct",
+                value=0,
+                update_function=lambda _, new: new,
+            )
+
         card.statistics.update(
-            key="correct",
-            value=1 if feedback.get("correct") else 0,
-            update_function=lambda existing, new: (existing or 0) + new,
-        )
-        card.statistics.update(
-            key="incorrect",
-            value=0 if feedback.get("correct") else 1,
+            key="seen",
+            value=1,
             update_function=lambda existing, new: (existing or 0) + new,
         )
 
@@ -126,7 +133,7 @@ class MasteryStrategy(CardStrategy):
         return BinaryFeedback("correct")
 
 
-class SimpleSpacedRepetition(CardStrategy):
+class SimpleSpacedRepetitionStrategy(CardStrategy):
     """This class implements a simple spaced repetition algorithm."""
 
     def get_next_card(self, cards: list[Card]) -> Card:
