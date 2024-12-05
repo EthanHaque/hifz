@@ -31,16 +31,34 @@ class Feedback(ABC):
 
 
 @dataclass
-class SingleSelectBooleanFeedback(Feedback):
-    """Feedback that allows only one boolean field to be True.
+class BinaryFeedback(Feedback):
+    """Feedback that allows a single option to be True or False."""
 
-    If there is only a single value, that value may be True or it may be False.
-    However, for any SingleSelectBooleanFeedback that has more than a single
-    option, only one of them may be True.
-    """
+    def __init__(self, field_name: str) -> None:
+        """Initialize the feedback with a single boolean field."""
+        super().__init__()
+        self.field_name = field_name
+        self.data = {field_name: False}
+
+    def validate(self) -> None:
+        """Ensures typing is correct and the value is boolean."""
+        super().validate()
+        true_count = sum(self.data.values())
+        if true_count > 1:
+            msg = f"{self.__class__.__name__} can only have one value (True/False)."
+            raise ValueError(msg)
+
+    def get_metadata(self) -> dict[str, dict[str, Any]]:
+        """Generates metadata for the single boolean option."""
+        return {self.field_name: {"type": bool}}
+
+
+@dataclass
+class SingleSelectBooleanFeedback(Feedback):
+    """Feedback that allows only one boolean field to be True."""
 
     def __init__(self, *options: str) -> None:
-        """Initialize the feedback with arbitrary boolean fields."""
+        """Initialize the feedback with multiple boolean fields."""
         super().__init__()
         self.options = options
         self.data = {option: False for option in self.options}
@@ -49,19 +67,15 @@ class SingleSelectBooleanFeedback(Feedback):
         """Ensures typing is correct and only one field is True."""
         super().validate()
         true_count = sum(self.data.values())
-        num_options = len(self.options)
-        if num_options == 0:
-            msg = "No values in feedback object"
+        if len(self.options) == 0:
+            msg = f"No options provided for {self.__class__.__name__}."
             raise ValueError(msg)
-        if true_count != 1 and num_options > 1:
-            msg = "Only one field can be True."
-            raise ValueError(msg)
-        if (true_count != 0 and true_count != 1) and num_options == 1:
-            msg = "There was only a single option, but we counted an incorrect number of responses."
+        if true_count != 1:
+            msg = f"Exactly one field must be True in {self.__class__.__name__}."
             raise ValueError(msg)
 
     def get_metadata(self) -> dict[str, dict[str, Any]]:
-        """Generates metadata for the provided options."""
+        """Generates metadata for the multiple boolean options."""
         return {option: {"type": bool} for option in self.options}
 
 
