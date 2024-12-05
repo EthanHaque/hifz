@@ -18,7 +18,9 @@ def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="A flashcard memorization program.")
 
     parser.add_argument(
-        "visualizer", choices=["cli", "gui"], help="The type of visualizer to use."
+        "visualizer",
+        choices=["cli", "gui", "tui"],
+        help="The type of visualizer to use.",
     )
     parser.add_argument(
         "strategy",
@@ -61,12 +63,18 @@ def get_visualizer(visualizer: str) -> CardInterface:
         case "cli":
             return CLICardInterface()
         case "gui":
+            # Prevents python from importing deps for the GUI like pyqt.
             try:
                 from hifz.visualizers.gui import GUICardInterface
             except ImportError as e:
                 raise e
             return GUICardInterface()
         case "tui":
+            # Prevents python from importing deps for the TUI like textual.
+            try:
+                from hifz.visualizers.tui import TUICardInterface
+            except ImportError as e:
+                raise e
             return TUICardInterface()
         case _:
             error_message = f"{visualizer} is not a valid visualizer"
