@@ -185,3 +185,20 @@ def test_engine_load_with_invalid_strategy(tmp_path_factory, utf8_test_file):
         ValueError, match="Unsupported strategy type: NonExistentStrategy"
     ):
         new_engine.load_progress(save_file)
+
+
+def test_summary(utf8_test_file):
+    """Test global session statistics."""
+    engine = CardEngine(RandomStrategy())
+    engine.load_cards(str(utf8_test_file))
+    for _ in range(5):
+        card = engine.get_next_card()
+        feedback = engine.get_feedback()
+        feedback.data["correct"] = True
+        engine.process_feedback(card, feedback)
+    for _ in range(3):
+        card = engine.get_next_card()
+        feedback = engine.get_feedback()
+        feedback.data["correct"] = False
+        engine.process_feedback(card, feedback)
+    assert engine.render_statistics() == "Correct: 5, Incorrect: 3."
