@@ -3,6 +3,7 @@
 import json
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from hifz.learning_strategies import (
     STRATEGY_NAME_TO_CLASS,
@@ -62,6 +63,10 @@ class CardSession:
 
         cards = [Card.from_dict(card_data) for card_data in session_data["cards"]]
         return cls(cards=cards, strategy=strategy)
+
+    def aggregate_statistics(self) -> dict[str, Any]:
+        """Gets global statistics from the Strategy."""
+        return self.strategy.aggregate_statistics(self.cards)
 
     def __repr__(self) -> str:
         """Machine-readable representation of the CardSession."""

@@ -91,3 +91,7 @@ class CLICardInterface(CardInterface):
             feedback = engine.get_feedback()
             user_feedback = self.get_user_feedback(feedback)
             engine.process_feedback(card, user_feedback)
+
+        # Add a line to separate the summary statistics.
+        self.notify("-" * 69)
+        self.notify(engine.render_statistics())
