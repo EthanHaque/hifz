@@ -40,6 +40,10 @@ class CardStrategy(ABC):
     def create_feedback(self) -> Feedback:
         """Defines the type of feedback the strategy uses."""
 
+    @abstractmethod
+    def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
+        """Computes global statistics."""
+
     def to_dict(self) -> dict[str, Any]:
         """Serializes the strategy state."""
         strategy_name = STRATEGY_CLASS_TO_NAME.get(type(self))
@@ -116,6 +120,15 @@ class RandomStrategy(CardStrategy):
         """Gets the type of Feedback this strategy uses."""
         return BinaryFeedback("correct")
 
+    def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
+        """Computes total number of correct and incorrect."""
+        total_correct = 0
+        total_incorrect = 0
+        for card in cards:
+            total_correct += card.statistics.get(key="correct", default=0)
+            total_incorrect += card.statistics.get(key="incorrect", default=0)
+        return {"Correct": total_correct, "Incorrect": total_incorrect}
+
 
 @register_strategy("SequentialStrategy")
 class SequentialStrategy(CardStrategy):
@@ -148,6 +161,13 @@ class SequentialStrategy(CardStrategy):
     def create_feedback(self) -> Feedback:
         """Gets the type of Feedback this strategy uses."""
         return BinaryFeedback("correct")
+
+    def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
+        """Placeholder."""
+        global_statistics = {}
+        for card in cards:
+            global_statistics[card.front] = card.statistics
+        return global_statistics
 
 
 @register_strategy("MasteryStrategy")
@@ -201,6 +221,13 @@ class MasteryStrategy(CardStrategy):
     def create_feedback(self) -> Feedback:
         """Gets the type of Feedback this strategy uses."""
         return BinaryFeedback("correct")
+
+    def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
+        """Placeholder."""
+        global_statistics = {}
+        for card in cards:
+            global_statistics[card.front] = card.statistics
+        return global_statistics
 
     def _serialize_state(self) -> dict[str, Any]:
         """Serializes the strategy state."""
@@ -290,3 +317,10 @@ class SimpleSpacedRepetitionStrategy(CardStrategy):
     def create_feedback(self) -> Feedback:
         """Defines the type of feedback this strategy uses."""
         return BinaryFeedback("correct")
+
+    def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
+        """Placeholder."""
+        global_statistics = {}
+        for card in cards:
+            global_statistics[card.front] = card.statistics
+        return global_statistics
