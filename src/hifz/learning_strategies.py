@@ -328,14 +328,14 @@ class SimpleSpacedRepetitionStrategy(CardStrategy):
 
 @register_strategy("AlphabeticalStrategy")
 class AlphabeticalStrategy(CardStrategy):
-    """This class offers a random ordering of the cards."""
+    """This class sorts cards by their front side."""
 
     def __init__(self) -> None:
         """Initialize the AlphabeticalStrategy."""
         self.index = 0
 
     def get_next_card(self, cards: list[Card]) -> Card:
-        """Returns the next card."""
+        """Returns the next card in alphabetical order."""
         cards = sorted(cards, key=lambda card: card.front)
 
         current_card = cards[self.index]
