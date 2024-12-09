@@ -187,7 +187,7 @@ def test_engine_load_with_invalid_strategy(tmp_path_factory, utf8_test_file):
         new_engine.load_progress(save_file)
 
 
-def test_summary(utf8_test_file):
+def test_global_statistics(utf8_test_file):
     """Test global session statistics."""
     engine = CardEngine(RandomStrategy())
     engine.load_cards(str(utf8_test_file))
@@ -201,4 +201,4 @@ def test_summary(utf8_test_file):
         feedback = engine.get_feedback()
         feedback.data["correct"] = False
         engine.process_feedback(card, feedback)
-    assert engine.render_statistics() == "Correct: 5, Incorrect: 3."
+    assert engine.session.aggregate_statistics() == {"Correct": 5, "Incorrect": 3}

@@ -127,7 +127,7 @@ class RandomStrategy(CardStrategy):
         for card in cards:
             total_correct += card.statistics.get(key="correct", default=0)
             total_incorrect += card.statistics.get(key="incorrect", default=0)
-        return {"total_correct": total_correct, "total_incorrect": total_incorrect}
+        return {"Correct": total_correct, "Incorrect": total_incorrect}
 
 
 @register_strategy("SequentialStrategy")

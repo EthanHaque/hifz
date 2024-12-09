@@ -147,12 +147,18 @@ class GUICardInterface(CardInterface):
         """Notifies the user with a message."""
         QMessageBox.information(self.window, "Notification", message)
 
+    def display_statistics(self, engine: CardEngine) -> None:
+        """Notifies the user of the global statistics."""
+        statistics = engine.session.aggregate_statistics()
+        self.notify("\n".join(f"{key}: {val}" for key, val in statistics.items()))
+
     def run_session(self, engine: CardEngine) -> None:
         """Launches the session."""
         self.engine = engine
         self.show_next_card()
         self.window.show()
         self.app.exec()
+        self.display_statistics(engine)
 
     def show_next_card(self) -> None:
         """Displays the next card."""

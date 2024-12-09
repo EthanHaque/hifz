@@ -20,6 +20,11 @@ class CLICardInterface(CardInterface):
         """Notifies with message."""
         print(message)  # noqa: T201
 
+    def display_statistics(self, engine: CardEngine) -> None:
+        """Notifies the user of the global statistics."""
+        statistics = engine.session.aggregate_statistics()
+        self.notify("\n".join(f"{key}: {val}" for key, val in statistics.items()))
+
     def get_user_feedback(self, feedback: Feedback) -> Feedback:
         """Dynamically prompts for feedback based on Feedback structure."""
         match feedback:
@@ -94,4 +99,4 @@ class CLICardInterface(CardInterface):
 
         # Add a line to separate the summary statistics.
         self.notify("-" * 69)
-        self.notify(engine.render_statistics())
+        self.display_statistics(engine)
