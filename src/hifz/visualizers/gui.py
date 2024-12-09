@@ -149,7 +149,7 @@ class GUICardInterface(CardInterface):
 
     def display_statistics(self, engine: CardEngine) -> None:
         """Notifies the user of the global statistics."""
-        statistics = engine.session.aggregate_statistics()
+        statistics = engine.aggregate_statistics()
         self.notify("\n".join(f"{key}: {val}" for key, val in statistics.items()))
 
     def run_session(self, engine: CardEngine) -> None:
