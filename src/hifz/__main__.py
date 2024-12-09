@@ -8,9 +8,8 @@ from hifz.learning_strategies import (
     STRATEGY_NAME_TO_CLASS,
     CardStrategy,
 )
-from hifz.visualizers import CardInterface
-from hifz.visualizers.cli import CLICardInterface
-from hifz.visualizers.tui import TUICardInterface
+from hifz.visualizers import Visualizer
+from hifz.visualizers.cli import CLIVisualizer
 
 
 def get_args() -> argparse.Namespace:
@@ -57,15 +56,15 @@ def get_strategy(strategy_name: str) -> CardStrategy:
     return strategy_cls()
 
 
-def get_visualizer(visualizer: str) -> CardInterface:
+def get_visualizer(visualizer: str) -> Visualizer:
     """Returns the desired visualizer."""
     match visualizer:
         case "cli":
-            return CLICardInterface()
+            return CLIVisualizer()
         case "gui":
             # Prevents python from importing deps for the GUI like pyqt.
             try:
-                from hifz.visualizers.gui import GUICardInterface
+                from hifz.visualizers.gui import GUIVisualizer
             except ImportError as e:
                 raise e
             return GUICardInterface()
@@ -86,7 +85,7 @@ def main() -> None:
     args = get_args()
 
     strategy = get_strategy(args.strategy)
-    interface = get_visualizer(args.visualizer)
+    visualizer = get_visualizer(args.visualizer)
 
     engine = CardEngine(strategy)
     if args.resume:
@@ -94,7 +93,7 @@ def main() -> None:
     else:
         engine.load_cards(args.file_path)
 
-    interface.run_session(engine)
+    visualizer.run_session(engine)
 
     if args.save:
         engine.save_progress(args.save)
