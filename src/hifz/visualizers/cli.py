@@ -2,26 +2,42 @@
 
 from hifz.card_engine import CardEngine
 from hifz.models import BinaryFeedback, Card, Feedback, SingleSelectBooleanFeedback
-from hifz.visualizers import CardInterface
+from hifz.visualizers import Visualizer
 
 
-class CLICardInterface(CardInterface):
+class CLIVisualizer(Visualizer):
     """This represents the command-line interface."""
 
     def display_card_front(self, card: Card) -> None:
-        """Displays the card front."""
+        """Displays the card front.
+
+        Args:
+            card (Card): The card to display.
+        """
         print(f"\nFront: {card.front}")  # noqa: T201
 
     def display_card_back(self, card: Card) -> None:
-        """Displays the card back."""
+        """Displays the card back.
+
+        Args:
+            card (Card): The card to display.
+        """
         print(f"Back: {card.back}")  # noqa: T201
 
     def notify(self, message: str) -> None:
-        """Notifies with message."""
+        """Notifies the user with message.
+
+        Args:
+            message (str): The message to notify the user.
+        """
         print(message)  # noqa: T201
 
     def display_statistics(self, engine: CardEngine) -> None:
-        """Notifies the user of the global statistics."""
+        """Displays the statistics for the user.
+
+        Args:
+            engine (CardEngine): The engine relevant to the session.
+        """
         statistics = engine.aggregate_statistics()
         self.notify("\n".join(f"{key}: {val}" for key, val in statistics.items()))
 
@@ -62,7 +78,11 @@ class CLICardInterface(CardInterface):
         return feedback
 
     def run_session(self, engine: CardEngine) -> None:
-        """Runs the session."""
+        """Runs the session.
+
+        Args:
+            engine (CardEngine): The engine relevant to starting the session.
+        """
         self.notify(
             "Starting flashcard session... Type 'q' to quit, 'reload' to load new cards."
         )
