@@ -30,7 +30,13 @@ class CLICardInterface(CardInterface):
         match feedback:
             case BinaryFeedback():
                 field_name = feedback.field_name
-                value = input(f"{field_name}? (y/n): ").strip().lower()
+                try:
+                    value = input(f"{field_name}? (y/n): ").strip().lower()
+                    if value not in ["y", "yes", "true", "n", "no", "false"]:
+                        raise ValueError
+                except ValueError:
+                    print("Invalid choice. Please try again.")  # noqa: T201
+                    return self.get_user_feedback(feedback)
                 feedback.data[field_name] = value in ["y", "yes", "true"]
 
             case SingleSelectBooleanFeedback():
