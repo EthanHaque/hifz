@@ -1,6 +1,7 @@
 """The card engine maintains the logic associated with user interaction and content production."""
 
 from pathlib import Path
+from typing import Any
 
 from hifz.dataserver import DataServer
 from hifz.learning_strategies import CardStrategy
@@ -50,6 +51,10 @@ class CardEngine:
         """Loads a session from saved progress."""
         self.session = CardSession.load_progress(file_path)
         self.strategy = self.session.strategy  # TODO: bad hack.
+
+    def aggregate_statistics(self) -> dict[str, Any]:
+        """Gets global statistics from the CardSession."""
+        return self.session.aggregate_statistics()
 
     def __str__(self) -> str:
         """Human-readable representation of the CardEngine."""
