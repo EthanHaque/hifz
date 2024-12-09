@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from hifz.learning_strategies import (
+    AlphabeticalStrategy,
     MasteryStrategy,
     RandomStrategy,
     SequentialStrategy,
@@ -330,3 +331,17 @@ def test_spaced_repetition_strategy_serialization():
     assert isinstance(
         deserialized, SimpleSpacedRepetitionStrategy
     ), "Failed to deserialize strategy correctly."
+
+
+def test_alphabetal_strategy_ordering():
+    """Tests that the AlphabeticalStrategy sorts cards correctly."""
+
+    alpha_strategy = AlphabeticalStrategy()
+    card1 = Card("B", "Second")
+    card2 = Card("A", "First")
+    card3 = Card("C", "Third")
+
+    session = CardSession([card1, card2, card3], alpha_strategy)
+    assert session.next_card() == card2
+    assert session.next_card() == card1
+    assert session.next_card() == card3
