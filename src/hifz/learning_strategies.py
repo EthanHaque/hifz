@@ -324,3 +324,48 @@ class SimpleSpacedRepetitionStrategy(CardStrategy):
         for card in cards:
             global_statistics[card.front] = card.statistics
         return global_statistics
+
+
+@register_strategy("AlphabeticalStrategy")
+class AlphabeticalStrategy(CardStrategy):
+    """This class sorts cards by their front side."""
+
+    def __init__(self) -> None:
+        """Initialize the AlphabeticalStrategy."""
+        self.index = 0
+
+    def get_next_card(self, cards: list[Card]) -> Card:
+        """Returns the next card in alphabetical order."""
+        cards = sorted(cards, key=lambda card: card.front)
+
+        current_card = cards[self.index]
+        self.index = (self.index + 1) % len(cards)
+
+        return current_card
+
+    def process_feedback(self, card: Card, feedback: Feedback) -> None:
+        """Processes the feedback associated with the card."""
+        feedback.validate()
+        card.statistics.update(
+            key="correct",
+            value=1 if feedback.get("correct") else 0,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+        card.statistics.update(
+            key="incorrect",
+            value=0 if feedback.get("correct") else 1,
+            update_function=lambda existing, new: (existing or 0) + new,
+        )
+
+    def create_feedback(self) -> Feedback:
+        """Gets the type of Feedback this strategy uses."""
+        return BinaryFeedback("correct")
+
+    def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
+        """Computes total number of correct and incorrect."""
+        total_correct = 0
+        total_incorrect = 0
+        for card in cards:
+            total_correct += card.statistics.get(key="correct", default=0)
+            total_incorrect += card.statistics.get(key="incorrect", default=0)
+        return {"Correct": total_correct, "Incorrect": total_incorrect}
