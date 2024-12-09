@@ -24,3 +24,7 @@ class CardInterface(ABC):
     @abstractmethod
     def run_session(self, engine: CardEngine) -> None:
         """Runs the session."""
+
+    @abstractmethod
+    def display_statistics(self, engine: CardEngine) -> None:
+        """Computes the global statistics and displays a representation to be displayed to the user."""
