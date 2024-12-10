@@ -30,15 +30,28 @@ class CardStrategy(ABC):
 
     @abstractmethod
     def get_next_card(self, cards: list[Card]) -> Card:
-        """Returns the next card."""
+        """Returns the next card.
+
+        Returns:
+            Card: The next card.
+        """
 
     @abstractmethod
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
-        """Processes the feedback associated with the card."""
+        """Processes the feedback associated with the card.
+
+        Args:
+            card (Card): The card associated with the feedback.
+            feedback (Feedback): The feedback associated with the card.
+        """
 
     @abstractmethod
     def create_feedback(self) -> Feedback:
-        """Defines the type of feedback the strategy uses."""
+        """Creates the feedback associated with the strategy.
+
+        Returns:
+            Feedback: The feedback associated with strategy.
+        """
 
     @abstractmethod
     def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
@@ -103,7 +116,12 @@ class RandomStrategy(CardStrategy):
         return random.choice(cards)
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
-        """Processes the feedback associated with the card."""
+        """Processes the user feedback.
+
+        Args:
+            card (Card): The card associated with the feedback.
+            feedback (Feedback): The user feedback associated with the card.
+        """
         feedback.validate()
         card.statistics.update(
             key="correct",
@@ -145,7 +163,12 @@ class SequentialStrategy(CardStrategy):
         return card
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
-        """Processes the feedback associated with the card."""
+        """Processes the user feedback.
+
+        Args:
+            card (Card): The card associated with the feedback.
+            feedback (Feedback): The user feedback associated with the card.
+        """
         feedback.validate()
         card.statistics.update(
             key="correct",
@@ -196,7 +219,12 @@ class MasteryStrategy(CardStrategy):
         return card
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
-        """Processes the feedback associated with the card."""
+        """Processes the user feedback.
+
+        Args:
+            card (Card): The card associated with the feedback.
+            feedback (Feedback): The user feedback associated with the card.
+        """
         feedback.validate()
 
         if feedback.get("correct"):
@@ -344,7 +372,12 @@ class AlphabeticalStrategy(CardStrategy):
         return current_card
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
-        """Processes the feedback associated with the card."""
+        """Processes the user feedback.
+
+        Args:
+            card (Card): The card associated with the feedback.
+            feedback (Feedback): The user feedback associated with the card.
+        """
         feedback.validate()
         card.statistics.update(
             key="correct",
