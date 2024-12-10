@@ -1,5 +1,6 @@
 """The card engine maintains the logic associated with user interaction and content production."""
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -9,13 +10,15 @@ from hifz.models import Card, Feedback
 from hifz.utils import CardSession
 
 
+@dataclass
 class CardEngine:
     """This class is responsible for running the main Hifz program."""
 
-    def __init__(self, strategy: CardStrategy) -> None:
+    strategy: CardStrategy
+
+    def __post_init__(self) -> None:
         """Instantiates the CardEngine."""
         self.session: CardSession
-        self.strategy = strategy
 
     def get_next_card(self) -> Card:
         """Returns the next card."""

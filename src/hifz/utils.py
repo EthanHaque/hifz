@@ -1,6 +1,7 @@
 """This module maintains the utility models and methods for the program."""
 
 import json
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -12,13 +13,12 @@ from hifz.learning_strategies import (
 from hifz.models import Card
 
 
+@dataclass
 class CardSession:
     """This class maintains the logic associated with starting a Card Session."""
 
-    def __init__(self, cards: list[Card], strategy: CardStrategy) -> None:
-        """Instantiates the CardSession."""
-        self.cards = cards
-        self.strategy = strategy
+    cards: list[Card]
+    strategy: CardStrategy
 
     def next_card(self) -> Card:
         """Returns the next card."""
