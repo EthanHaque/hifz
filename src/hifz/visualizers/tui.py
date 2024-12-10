@@ -4,7 +4,7 @@ from textual.app import App, ComposeResult
 from textual.widgets import Footer, Header, Static
 
 from hifz.card_engine import CardEngine
-from hifz.models import Card
+from hifz.models import BinaryFeedback, Card
 from hifz.visualizers import CardInterface
 
 
@@ -19,6 +19,10 @@ class CardWidget(Static):
         self.current_card = card
         self.is_front = True
         self.update(self.current_card.front)
+
+    def get_card(self) -> Card:
+        """Returns the current card."""
+        return self.current_card
 
     def flip(self) -> None:
         """Shows the other side of the card."""
@@ -50,7 +54,8 @@ class CardApp(App):
     BINDINGS = [
         ("j", "flip_card", "Flip Card"),
         ("k", "flip_card", "Flip Card"),
-        ("l", "next_card", "Next Card"),
+        ("u", "record_correct", "Correct"),
+        ("i", "record_incorrect", "Incorrect"),
     ]
 
     def __init__(self, engine: CardEngine, **kwargs) -> None:
@@ -72,6 +77,24 @@ class CardApp(App):
         """Helper method to get the next card in the sequence."""
         next_card = self.engine.get_next_card()
         self.query_one(CardWidget).update_card(next_card)
+
+    def action_record_correct(self) -> None:
+        """Records a card as correct for BinaryFeedback."""
+        feedback = self.engine.get_feedback()
+        if not isinstance(feedback, BinaryFeedback):
+            raise NotImplementedError()
+        feedback.data[feedback.field_name] = True
+        self.engine.process_feedback(self.query_one(CardWidget).get_card(), feedback)
+        self.action_next_card()
+
+    def action_record_incorrect(self) -> None:
+        """Records a card as incorrect for BinaryFeedback."""
+        feedback = self.engine.get_feedback()
+        if not isinstance(feedback, BinaryFeedback):
+            raise NotImplementedError()
+        feedback.data[feedback.field_name] = False
+        self.engine.process_feedback(self.query_one(CardWidget).get_card(), feedback)
+        self.action_next_card()
 
     def on_mount(self) -> None:
         """Gets a card as soon as the TUI loads."""
