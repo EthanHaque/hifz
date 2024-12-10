@@ -25,7 +25,7 @@ def test_random_strategy_returns_card(cards: list[Card]):
     """
     random_strategy = RandomStrategy()
     session = CardSession(cards, random_strategy)
-    card = session.next_card()
+    card = session.get_next_card()
     assert card in cards
 
 
@@ -44,9 +44,9 @@ def test_sequential_strategy_returns_in_order(cards: list[Card]):
     sequential_strategy = SequentialStrategy()
     session = CardSession(cards, sequential_strategy)
 
-    card1 = session.next_card()
-    card2 = session.next_card()
-    card3 = session.next_card()
+    card1 = session.get_next_card()
+    card2 = session.get_next_card()
+    card3 = session.get_next_card()
 
     assert card1 == cards[0]
     assert card2 == cards[1]
@@ -70,9 +70,9 @@ def test_sequential_strategy_wraps_around(cards: list[Card]):
 
     # Loop through the list to force wrap-around
     for _ in range(len(cards)):
-        session.next_card()
+        session.get_next_card()
 
-    card = session.next_card()
+    card = session.get_next_card()
     assert card == cards[0], "SequentialStrategy did not wrap around."
 
 
@@ -88,7 +88,7 @@ def test_mastery_strategy_prioritizes_low_correct_cards():
     card3.statistics.update("correct", 50, lambda _, new: new)
 
     session = CardSession([card1, card2, card3], mastery_strategy)
-    next_card = session.next_card()
+    next_card = session.get_next_card()
 
     assert (
         next_card == card2
@@ -141,7 +141,7 @@ def test_random_strategy_processes_feedback(cards):
     random_strategy = RandomStrategy()
     session = CardSession(cards, random_strategy)
 
-    card = session.next_card()
+    card = session.get_next_card()
     feedback = random_strategy.create_feedback()
     feedback.data["correct"] = True
     random_strategy.process_feedback(card, feedback)
@@ -163,7 +163,7 @@ def test_sequential_strategy_processes_feedback(cards):
     sequential_strategy = SequentialStrategy()
     session = CardSession(cards, sequential_strategy)
 
-    card = session.next_card()
+    card = session.get_next_card()
     feedback = sequential_strategy.create_feedback()
     feedback.data["correct"] = True
     sequential_strategy.process_feedback(card, feedback)
@@ -182,7 +182,7 @@ def test_simple_spaced_repetition_strategy_process_feedback_interval_increase(
     spaced_repetition_strategy = SimpleSpacedRepetitionStrategy()
     session = CardSession(cards, spaced_repetition_strategy)
 
-    card = session.next_card()
+    card = session.get_next_card()
 
     feedback = spaced_repetition_strategy.create_feedback()
     feedback.data["correct"] = True
@@ -212,7 +212,7 @@ def test_simple_spaced_repetition_strategy_process_feedback_interval_decrease(
     spaced_repetition_strategy = SimpleSpacedRepetitionStrategy()
     session = CardSession(cards, spaced_repetition_strategy)
 
-    card = session.next_card()
+    card = session.get_next_card()
 
     feedback = spaced_repetition_strategy.create_feedback()
     feedback.data["correct"] = True
@@ -268,7 +268,7 @@ def test_spaced_repetition_prioritizes_due_cards():
     card3.statistics.update("due", now - timedelta(hours=2), lambda _, new: new)
 
     session = CardSession([card1, card2, card3], spaced_strategy)
-    next_card = session.next_card()
+    next_card = session.get_next_card()
 
     assert next_card in [
         card1,
@@ -287,7 +287,7 @@ def test_spaced_repetition_selects_random_for_no_due_cards():
     card2.statistics.update("due", now + timedelta(days=2), lambda _, new: new)
 
     session = CardSession([card1, card2], spaced_strategy)
-    next_card = session.next_card()
+    next_card = session.get_next_card()
 
     assert next_card in [
         card1,
@@ -342,6 +342,6 @@ def test_alphabetal_strategy_ordering():
     card3 = Card("C", "Third")
 
     session = CardSession([card1, card2, card3], alpha_strategy)
-    assert session.next_card() == card2
-    assert session.next_card() == card1
-    assert session.next_card() == card3
+    assert session.get_next_card() == card2
+    assert session.get_next_card() == card1
+    assert session.get_next_card() == card3

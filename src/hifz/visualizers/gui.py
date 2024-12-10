@@ -42,7 +42,7 @@ class GUIVisualizer(Visualizer):
         self.layout.addWidget(self.flip_button)
 
         self.reload_button = QPushButton("Reload")
-        self.reload_button.clicked.connect(self.reload_cards)
+        self.reload_button.clicked.connect(self.load_cards)
         self.layout.addWidget(self.reload_button)
 
         self.window.setLayout(self.layout)
@@ -122,7 +122,7 @@ class GUIVisualizer(Visualizer):
         self.layout.addWidget(flip_button)
 
         reload_button = QPushButton("Reload")
-        reload_button.clicked.connect(self.reload_cards)
+        reload_button.clicked.connect(self.load_cards)
         self.layout.addWidget(reload_button)
 
     def submit_feedback(self, feedback: Feedback, updated_data: dict[str, Any]) -> None:
@@ -167,7 +167,7 @@ class GUIVisualizer(Visualizer):
         Args:
             engine (CardEngine): The engine relevant to the session.
         """
-        statistics = engine.aggregate_statistics()
+        statistics = engine.get_statistics()
         self.notify("\n".join(f"{key}: {val}" for key, val in statistics.items()))
 
     def run_session(self, engine: CardEngine) -> None:
@@ -196,12 +196,12 @@ class GUIVisualizer(Visualizer):
         else:
             self.display_card_front(self.current_card)
 
-    def reload_cards(self):
+    def load_cards(self):
         """Reloads the cards."""
         new_file_path = QFileDialog.getOpenFileName(
             self.window, "Open File", "{$HOME}"
         )[0]
-        if self.engine.reload_cards(new_file_path):
+        if self.engine.load_cards(new_file_path):
             self.notify("Cards reloaded successfully.")
         else:
             self.notify("Failed to reload cards.")
