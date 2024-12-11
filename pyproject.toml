@@ -22,6 +22,9 @@ docs = [
     "myst_parser >=0.13",  # Markdown
     "sphinx_copybutton",  # Easy code copy button
 ]
+tui = [
+    "textual>=0.83.0",
+]
 
 [build-system]
 requires = ["setuptools", "wheel"]
