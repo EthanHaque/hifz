@@ -1,3 +1,5 @@
+import xml.dom.minidom as xml
+
 import pytest
 
 from hifz.models import Card
@@ -60,6 +62,46 @@ def json_file(tmp_path_factory):
     tmp_file_path = tmp_path_factory.mktemp("data") / "test_arabic.json"
     with tmp_file_path.open("w", encoding="utf-8") as f:
         f.write('[{"front": "ب", "back": "baa"}]')
+    return tmp_file_path
+
+
+@pytest.fixture
+def xml_file(tmp_path_factory):
+    """Fixture that creates a temporary XML file for testing.
+
+    The XML file contains Arabic characters with their English transliterations,
+    stored as dictionaries with 'front' and 'back' keys representing question and answer
+    sides of a card, respectively.
+
+    Args:
+        tmp_path_factory (TempPathFactory): Fixture for creating temporary paths.
+
+    Returns:
+        tmp_file_path (TempPathFactory): Path to the temporary XML file.
+    """
+    tmp_file_path = tmp_path_factory.mktemp("data") / "test_arabic.xml"
+    doc = xml.Document()
+
+    root = doc.createElement("cards")
+    doc.appendChild(root)
+
+    card_element = doc.createElement("card")
+    root.appendChild(card_element)
+
+    front_element = doc.createElement("front")
+    front_text = doc.createTextNode("ب")
+    front_element.appendChild(front_text)
+    card_element.appendChild(front_element)
+
+    back_element = doc.createElement("back")
+    back_text = doc.createTextNode("baa")
+    back_element.appendChild(back_text)
+    card_element.appendChild(back_element)
+
+    xml_str = doc.toprettyxml(indent="  ", encoding="utf-8")
+    with tmp_file_path.open("wb") as f:
+        f.write(xml_str)
+
     return tmp_file_path
 
 
