@@ -69,7 +69,7 @@ def get_visualizer(visualizer: str) -> Visualizer:
             return GUIVisualizer()
         case "tui":
             try:
-                from hifz.visualizers.gui import TUIVisualizer
+                from hifz.visualizers.tui import TUIVisualizer
             except ImportError as e:
                 raise e
             return TUIVisualizer()
