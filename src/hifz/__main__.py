@@ -17,7 +17,9 @@ def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="A flashcard memorization program.")
 
     parser.add_argument(
-        "visualizer", choices=["cli", "gui"], help="The type of visualizer to use."
+        "visualizer",
+        choices=["cli", "gui", "tui"],
+        help="The type of visualizer to use.",
     )
     parser.add_argument(
         "strategy",
@@ -65,6 +67,12 @@ def get_visualizer(visualizer: str) -> Visualizer:
             except ImportError as e:
                 raise e
             return GUIVisualizer()
+        case "tui":
+            try:
+                from hifz.visualizers.gui import TUIVisualizer
+            except ImportError as e:
+                raise e
+            return TUIVisualizer()
         case _:
             error_message = f"{visualizer} is not a valid visualizer"
             raise ValueError(error_message)
