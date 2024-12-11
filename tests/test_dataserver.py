@@ -57,6 +57,23 @@ def test_dataserver_returns_card_json(json_file):
     assert Card("ب", "baa") in cards
 
 
+def test_dataserver_returns_card_tsv(tsv_file):
+    """Test that DataServer reads card entries from a tsv file correctly.
+
+    Verifies that a tsv file with Arabic characters is read properly, and its contents
+    are stored as Card objects.
+
+    Args:
+        tsv_file (Path): Path to a tsv file with sample Arabic content.
+
+    Asserts:
+        - Card("ب", "baa") is in the output list.
+    """
+    server = DataServer()
+    cards = server.read_entries(str(tsv_file))
+    assert Card("ب", "baa") in cards
+
+
 def test_dataserver_file_not_found():
     """Test that DataServer raises a FileNotFoundError for a non-existent file.
 

@@ -24,6 +24,26 @@ def csv_file(tmp_path_factory):
 
 
 @pytest.fixture
+def tsv_file(tmp_path_factory):
+    """Fixture that creates a temporary tsv file for testing.
+
+    The tsv file contains sample Arabic characters and their English transliterations.
+    It includes two columns: 'front' and 'back', representing the question and answer sides
+    of a card, respectively.
+
+    Args:
+        tmp_path_factory (TempPathFactory): Fixture for creating temporary paths.
+
+    Returns:
+        tmp_file_path (TempPathFactory): Path to the temporary tsv file.
+    """
+    tmp_file_path = tmp_path_factory.mktemp("data") / "test_arabic.tsv"
+    with tmp_file_path.open("w", encoding="utf-8") as f:
+        f.writelines(["front\tback\n", "ب\tbaa\n"])
+    return tmp_file_path
+
+
+@pytest.fixture
 def json_file(tmp_path_factory):
     """Fixture that creates a temporary JSON file for testing.
 
