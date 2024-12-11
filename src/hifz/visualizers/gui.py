@@ -3,8 +3,8 @@
 import sys
 from typing import Any
 
-from PyQt6.QtCore import Qt  # type: ignore[import-not-found]
-from PyQt6.QtWidgets import (  # type: ignore[import-not-found]
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (
     QApplication,
     QFileDialog,
     QHBoxLayout,
