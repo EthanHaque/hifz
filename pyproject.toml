@@ -58,6 +58,9 @@ disallow_untyped_defs = false
 disallow_incomplete_defs = false
 exclude = "src/hifz/visualizers/gui.py"
 
+[tool.mypy.PyQt6.*]
+ignore_missing_imports = true
+
 [tool.ruff.lint]
 extend-select = [
     "B",           # flake8-bugbear

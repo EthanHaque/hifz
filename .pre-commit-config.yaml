@@ -23,6 +23,6 @@ repos:
     hooks:
       - id: mypy
         files: src
-        args: ["--exclude", "src/hifz/visualizers/gui.py"]
+        args: []
         additional_dependencies:
           - textual
