@@ -59,9 +59,11 @@ class GUIVisualizer(Visualizer):
     def clear_buttons(self) -> None:
         """Clears all buttons except the static card label."""
         while self.layout.count() > 1:  # Keep only the card label
-            widget = self.layout.takeAt(1).widget()
-            if widget:
-                widget.deleteLater()
+            item = self.layout.takeAt(1)
+            if item is not None:
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
 
     def create_feedback_buttons(self, feedback: Feedback) -> None:
         """Creates and adds buttons dynamically based on feedback type."""
