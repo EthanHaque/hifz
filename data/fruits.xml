@@ -1,0 +1,22 @@
+<cards>
+  <card>
+    <front>a</front>
+    <back>apple</back>
+  </card>
+  <card>
+    <front>b</front>
+    <back>banana</back>
+  </card>
+  <card>
+    <front>c</front>
+    <back>coconut</back>
+  </card>
+  <card>
+    <front>d</front>
+    <back>date</back>
+  </card>
+  <card>
+    <front>e</front>
+    <back>elderberry</back>
+  </card>
+</cards>
