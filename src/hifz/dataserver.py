@@ -27,6 +27,16 @@ class CSVFileInputStrategy(FileInputStrategy):
             return [Card(e["front"], e["back"]) for e in reader]
 
 
+class TSVFileInputStrategy(FileInputStrategy):
+    """This class maintains the logic for reading from tsv files types."""
+
+    def read_entries(self, file_path: Path) -> list[Card]:
+        """Reads the entries from the tsv at file_path."""
+        with file_path.open("r", encoding="utf-8") as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            return [Card(e["front"], e["back"]) for e in reader]
+
+
 class JSONFileInputStrategy(FileInputStrategy):
     """This class maintains the logic for reading from json files types."""
 
@@ -79,6 +89,7 @@ class FileInputReader:
             ".csv": CSVFileInputStrategy(),
             ".json": JSONFileInputStrategy(),
             ".xml": XMLFileInputStrategy(),
+            ".tsv": TSVFileInputStrategy(),
         }
 
     def get_strategy(self, file_extension: str) -> FileInputStrategy:
