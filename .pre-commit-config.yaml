@@ -26,4 +26,3 @@ repos:
         args: []
         additional_dependencies:
           - textual
-          - PyQt6
