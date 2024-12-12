@@ -13,14 +13,14 @@ class FileInputStrategy(ABC):
     """This ABC is an interface for the delivery independent of file types."""
 
     @abstractmethod
-    def read_entries(self, file_path: Path) -> list[Card]:
+    def read_cards(self, file_path: Path) -> list[Card]:
         """Reads the entries from file_path."""
 
 
 class CSVFileInputStrategy(FileInputStrategy):
     """This class maintains the logic for reading from csv files types."""
 
-    def read_entries(self, file_path: Path) -> list[Card]:
+    def read_cards(self, file_path: Path) -> list[Card]:
         """Reads the entries from the csv at file_path."""
         with file_path.open("r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
@@ -30,7 +30,7 @@ class CSVFileInputStrategy(FileInputStrategy):
 class TSVFileInputStrategy(FileInputStrategy):
     """This class maintains the logic for reading from tsv files types."""
 
-    def read_entries(self, file_path: Path) -> list[Card]:
+    def read_cards(self, file_path: Path) -> list[Card]:
         """Reads the entries from the tsv at file_path."""
         with file_path.open("r", encoding="utf-8") as f:
             reader = csv.DictReader(f, delimiter="\t")
@@ -40,7 +40,7 @@ class TSVFileInputStrategy(FileInputStrategy):
 class JSONFileInputStrategy(FileInputStrategy):
     """This class maintains the logic for reading from json files types."""
 
-    def read_entries(self, file_path: Path) -> list[Card]:
+    def read_cards(self, file_path: Path) -> list[Card]:
         """Reads the entries from the json at file_path."""
         with file_path.open("r", encoding="utf-8") as f:
             entries = json.load(f)
@@ -50,7 +50,7 @@ class JSONFileInputStrategy(FileInputStrategy):
 class XMLFileInputStrategy(FileInputStrategy):
     """This class maintains the logic for reading from XML files types."""
 
-    def read_entries(self, file_path: Path) -> list[Card]:
+    def read_cards(self, file_path: Path) -> list[Card]:
         """Reads the entries from the XML at file_path."""
         with file_path.open("r", encoding="utf-8") as f:
             dom = xml.parse(f)
@@ -100,11 +100,11 @@ class FileInputReader:
             raise ValueError(msg)
         return strategy
 
-    def read_entries(self, file_path: str) -> list[Card]:
+    def read_cards(self, file_path: str) -> list[Card]:
         """Reads the entries at file_path."""
         path = Path(file_path)
         strategy = self.get_strategy(path.suffix.lower())
-        return strategy.read_entries(path)
+        return strategy.read_cards(path)
 
 
 class DataServer:
@@ -114,10 +114,10 @@ class DataServer:
         """Instantiates the DataServer."""
         self.file_reader = FileInputReader()
 
-    def read_entries(self, file_path: str) -> list[Card]:
+    def read_cards(self, file_path: str) -> list[Card]:
         """Reads the entries associated with the file at file_path."""
         try:
-            return self.file_reader.read_entries(file_path)
+            return self.file_reader.read_cards(file_path)
         except FileNotFoundError as err:
             msg = f"Error: The file at path '{file_path}' was not found."
             raise FileNotFoundError(msg) from err

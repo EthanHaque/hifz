@@ -56,7 +56,7 @@ class CardEngine:
         """
         data_server = DataServer()
         try:
-            new_cards = data_server.read_entries(file_path)
+            new_cards = data_server.read_cards(file_path)
             self.session = CardSession(new_cards, self.strategy)
             return True
         except Exception:
