@@ -31,6 +31,11 @@ def get_args() -> argparse.Namespace:
         type=Path,
         help="Optional: Path to save progress after the session ends.",
     )
+    parser.add_argument(
+        "--reverse",
+        action="store_true",
+        help="Optional: Path to save progress after the session ends.",
+    )
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
@@ -89,7 +94,7 @@ def main() -> None:
     if args.resume:
         engine.load_progress(args.resume)
     else:
-        engine.load_cards(args.file_path)
+        engine.load_cards(args.file_path, args.reverse)
 
     visualizer.run_session(engine)
 
