@@ -2,9 +2,12 @@
 
 import csv
 import json
+import tempfile
 import xml.dom.minidom as xml
 from abc import ABC, abstractmethod
 from pathlib import Path
+
+import requests
 
 from hifz.models import Card
 
@@ -125,6 +128,16 @@ class DataServer:
 
     def read_entries(self, file_path: str, reverse: bool = False) -> list[Card]:
         """Reads the entries associated with the file at file_path."""
+        if file_path.startswith(("http://", "https://")):
+            response = requests.get(file_path)
+            response.raise_for_status()
+
+            with tempfile.TemporaryDirectory() as tempdir:
+                filepath = Path(tempdir) / "tmp.csv"
+                with filepath.open("w", encoding="utf-8") as fp:
+                    fp.write(response.text)
+                file_path = str(filepath)
+
         try:
             return self.file_reader.read_entries(file_path, reverse=reverse)
         except FileNotFoundError as err:
