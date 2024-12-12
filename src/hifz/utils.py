@@ -1,6 +1,7 @@
 """This module maintains the utility models and methods for the program."""
 
 import json
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -12,20 +13,27 @@ from hifz.learning_strategies import (
 from hifz.models import Card
 
 
+@dataclass
 class CardSession:
     """This class maintains the logic associated with starting a Card Session."""
 
-    def __init__(self, cards: list[Card], strategy: CardStrategy) -> None:
-        """Instantiates the CardSession."""
-        self.cards = cards
-        self.strategy = strategy
+    cards: list[Card]
+    strategy: CardStrategy
 
-    def next_card(self) -> Card:
-        """Returns the next card."""
+    def get_next_card(self) -> Card:
+        """Returns the next card.
+
+        Returns:
+            Card: The next card.
+        """
         return self.strategy.get_next_card(self.cards)
 
     def save_progress(self, file_path: Path) -> None:
-        """Saves the session state to a file."""
+        """Saves the current session state.
+
+        Args:
+            file_path (Path): The file path to save the state.
+        """
         data = {
             "metadata": {
                 "version": "1.0",
@@ -43,7 +51,11 @@ class CardSession:
 
     @classmethod
     def load_progress(cls, file_path: Path) -> "CardSession":
-        """Loads the session state from a file."""
+        """Loads progress associated with the file path.
+
+        Args:
+            file_path (Path): The file path to load the progress from.
+        """
         with file_path.open("r", encoding="utf-8") as f:
             data = json.load(f)
 
@@ -64,8 +76,12 @@ class CardSession:
         cards = [Card.from_dict(card_data) for card_data in session_data["cards"]]
         return cls(cards=cards, strategy=strategy)
 
-    def aggregate_statistics(self) -> dict[str, Any]:
-        """Gets global statistics from the Strategy."""
+    def get_statistics(self) -> dict[str, Any]:
+        """Returns the associated with the session.
+
+        Returns:
+            dict[str, Any]: The statistics associated with the session.
+        """
         return self.strategy.aggregate_statistics(self.cards)
 
     def __repr__(self) -> str:

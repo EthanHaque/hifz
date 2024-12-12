@@ -1,5 +1,6 @@
 """The card engine maintains the logic associated with user interaction and content production."""
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -9,52 +10,83 @@ from hifz.models import Card, Feedback
 from hifz.utils import CardSession
 
 
+@dataclass
 class CardEngine:
     """This class is responsible for running the main Hifz program."""
 
-    def __init__(self, strategy: CardStrategy) -> None:
+    strategy: CardStrategy
+
+    def __post_init__(self) -> None:
         """Instantiates the CardEngine."""
         self.session: CardSession
-        self.strategy = strategy
 
     def get_next_card(self) -> Card:
-        """Returns the next card."""
-        return self.session.next_card()
+        """Returns the next card.
+
+        Returns:
+            Card: The next card.
+        """
+        return self.session.get_next_card()
 
     def process_feedback(self, card: Card, feedback: Feedback) -> None:
-        """Processes the user feedback."""
+        """Processes the user feedback.
+
+        Args:
+            card (Card): The card associated with the feedback.
+            feedback (Feedback): The user feedback associated with the card.
+        """
         self.session.strategy.process_feedback(card, feedback)
 
     def get_feedback(self) -> Feedback:
-        """Gets the feedback type for the particular strategy used."""
+        """Returns the feedback for the visualizer.
+
+        Returns:
+            Feedback: The feedback object for the visualizer.
+        """
         return self.session.strategy.create_feedback()
 
     def load_cards(self, file_path: str, reverse: bool = False) -> bool:
-        """Loads the cards at file_path to be interacted with."""
+        """Loads the cards at file_path to be interacted with.
+
+        Args:
+            file_path (str): The file_path of the cards.
+            reverse (bool): Swap the front and the back of the cards.
+
+        Returns:
+            bool: Whether the retrieval was successful.
+        """
         data_server = DataServer()
         try:
-            new_cards = data_server.read_entries(file_path, reverse=reverse)
+            new_cards = data_server.read_cards(file_path, reverse=reverse)
             self.session = CardSession(new_cards, self.strategy)
             return True
         except Exception:
             return False
 
-    def reload_cards(self, file_path: str) -> bool:
-        """Reloads the cards at file_path."""
-        return self.load_cards(file_path)
-
     def save_progress(self, file_path: Path) -> None:
-        """Saves the current session state."""
+        """Saves the current session state.
+
+        Args:
+            file_path (Path): The file path to save the state.
+        """
         self.session.save_progress(file_path)
 
     def load_progress(self, file_path: Path) -> None:
-        """Loads a session from saved progress."""
+        """Loads progress associated with the file path.
+
+        Args:
+            file_path (Path): The file path to load the progress from.
+        """
         self.session = CardSession.load_progress(file_path)
         self.strategy = self.session.strategy  # TODO: bad hack.
 
-    def aggregate_statistics(self) -> dict[str, Any]:
-        """Gets global statistics from the CardSession."""
-        return self.session.aggregate_statistics()
+    def get_statistics(self) -> dict[str, Any]:
+        """Returns the associated with the session.
+
+        Returns:
+            dict[str, Any]: The statistics associated with the session.
+        """
+        return self.session.get_statistics()
 
     def __str__(self) -> str:
         """Human-readable representation of the CardEngine."""

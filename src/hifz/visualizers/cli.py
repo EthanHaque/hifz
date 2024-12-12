@@ -38,7 +38,7 @@ class CLIVisualizer(Visualizer):
         Args:
             engine (CardEngine): The engine relevant to the session.
         """
-        statistics = engine.aggregate_statistics()
+        statistics = engine.get_statistics()
         self.notify("\n".join(f"{key}: {val}" for key, val in statistics.items()))
 
     def get_user_feedback(self, feedback: Feedback) -> Feedback:
@@ -119,7 +119,7 @@ class CLIVisualizer(Visualizer):
 
             if action == "reload":
                 new_file_path = input("Enter the new file path: ")
-                if engine.reload_cards(new_file_path):
+                if engine.load_cards(new_file_path):
                     self.notify(f"Successfully loaded new cards from {new_file_path}")
                 else:
                     self.notify(f"Failed to load new cards from {new_file_path}")

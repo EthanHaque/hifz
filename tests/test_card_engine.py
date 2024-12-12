@@ -68,26 +68,6 @@ def test_process_feedback(utf8_test_file):
     assert card.statistics.get("correct") == 1
 
 
-def test_reload_cards(utf8_test_file):
-    """Test reloading cards into the CardEngine.
-
-    Loads cards from a file, then reloads them to ensure that the reload function
-    works correctly and maintains the correct number of cards.
-
-    Args:
-        utf8_test_file (Path): Path to a CSV file with UTF-8 encoded content.
-
-    Asserts:
-        - load_cards() returns True if cards were successfully loaded
-        - reload_cards() returns True if cards were successfully reloaded
-        - The card count remains consistent (2) after reloading.
-    """
-    engine = CardEngine(RandomStrategy())
-    assert engine.load_cards(str(utf8_test_file)) is True
-    assert engine.reload_cards(str(utf8_test_file)) is True
-    assert len(engine.session.cards) == 2
-
-
 def test_engine_unsupported_file_extension(tmp_path_factory):
     """Test loading a file with an unsupported file extension.
 
@@ -206,7 +186,7 @@ def test_global_statistics(utf8_test_file):
         feedback = engine.get_feedback()
         feedback.data["correct"] = False
         engine.process_feedback(card, feedback)
-    assert engine.session.aggregate_statistics() == {"Correct": 5, "Incorrect": 3}
+    assert engine.session.get_statistics() == {"Correct": 5, "Incorrect": 3}
 
 
 def test_spaced_repetition_serialization(utf8_test_file, tmp_path_factory):
