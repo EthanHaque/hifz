@@ -1,7 +1,12 @@
 import pytest
 
 from hifz.card_engine import CardEngine
-from hifz.learning_strategies import MasteryStrategy, RandomStrategy, SequentialStrategy
+from hifz.learning_strategies import (
+    MasteryStrategy,
+    RandomStrategy,
+    SequentialStrategy,
+    SimpleSpacedRepetitionStrategy,
+)
 
 
 def test_load_cards(utf8_test_file):
@@ -177,12 +182,12 @@ def test_engine_load_with_invalid_strategy(tmp_path_factory, utf8_test_file):
     engine.save_progress(save_file)
 
     save_data = save_file.read_text()
-    save_data = save_data.replace("SequentialStrategy", "NonExistentStrategy")
+    save_data = save_data.replace("sequential", "non_existent_strategy")
     save_file.write_text(save_data)
 
     new_engine = CardEngine(SequentialStrategy())
     with pytest.raises(
-        ValueError, match="Unsupported strategy type: NonExistentStrategy"
+        ValueError, match="Unsupported strategy type: non_existent_strategy"
     ):
         new_engine.load_progress(save_file)
 
@@ -202,3 +207,18 @@ def test_global_statistics(utf8_test_file):
         feedback.data["correct"] = False
         engine.process_feedback(card, feedback)
     assert engine.session.aggregate_statistics() == {"Correct": 5, "Incorrect": 3}
+
+
+def test_spaced_repetition_serialization(utf8_test_file, tmp_path_factory):
+    """Tests card seralization for the SSR strategy."""
+    engine = CardEngine(SimpleSpacedRepetitionStrategy())
+    engine.load_cards(utf8_test_file)
+    for _ in range(5):
+        card = engine.get_next_card()
+        feedback = engine.get_feedback()
+        feedback.data["correct"] = True
+        engine.process_feedback(card, feedback)
+
+    output_path = tmp_path_factory.mktemp("saves") / "save.json"
+    engine.save_progress(output_path)
+    engine.load_progress(output_path)

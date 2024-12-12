@@ -3,28 +3,15 @@
 from abc import ABC, abstractmethod
 
 from hifz.card_engine import CardEngine
-from hifz.models import Card
 
 
-class CardInterface(ABC):
-    """This ABC represents the CardInterface."""
-
-    @abstractmethod
-    def display_card_front(self, card: Card) -> None:
-        """Displays the card front."""
-
-    @abstractmethod
-    def display_card_back(self, card: Card) -> None:
-        """Displays the card back."""
-
-    @abstractmethod
-    def notify(self, message: str) -> None:
-        """Notifies with a message."""
+class Visualizer(ABC):
+    """Interface for the visualizers."""
 
     @abstractmethod
     def run_session(self, engine: CardEngine) -> None:
-        """Runs the session."""
+        """Runs the session.
 
-    @abstractmethod
-    def display_statistics(self, engine: CardEngine) -> None:
-        """Computes the global statistics and displays a representation to be displayed to the user."""
+        Args:
+            engine (CardEngine): The engine relevant to starting the session.
+        """

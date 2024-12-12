@@ -3,8 +3,8 @@
 import sys
 from typing import Any
 
-from PyQt6.QtCore import Qt  # type: ignore[import-not-found]
-from PyQt6.QtWidgets import (  # type: ignore[import-not-found]
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (
     QApplication,
     QFileDialog,
     QHBoxLayout,
@@ -17,10 +17,10 @@ from PyQt6.QtWidgets import (  # type: ignore[import-not-found]
 
 from hifz.card_engine import CardEngine
 from hifz.models import BinaryFeedback, Card, Feedback, SingleSelectBooleanFeedback
-from hifz.visualizers import CardInterface
+from hifz.visualizers import Visualizer
 
 
-class GUICardInterface(CardInterface):
+class GUIVisualizer(Visualizer):
     """This class maintains the GUI."""
 
     def __init__(self) -> None:
@@ -59,9 +59,11 @@ class GUICardInterface(CardInterface):
     def clear_buttons(self) -> None:
         """Clears all buttons except the static card label."""
         while self.layout.count() > 1:  # Keep only the card label
-            widget = self.layout.takeAt(1).widget()
-            if widget:
-                widget.deleteLater()
+            item = self.layout.takeAt(1)
+            if item is not None:
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
 
     def create_feedback_buttons(self, feedback: Feedback) -> None:
         """Creates and adds buttons dynamically based on feedback type."""
@@ -134,26 +136,46 @@ class GUICardInterface(CardInterface):
             self.notify(str(e))
 
     def display_card_front(self, card: Card) -> None:
-        """Displays the card front."""
+        """Displays the card front.
+
+        Args:
+            card (Card): The card to display.
+        """
         self.card_label.setText(f"Front: {card.front}")
         self.is_front = True
 
     def display_card_back(self, card: Card) -> None:
-        """Displays the card back."""
+        """Displays the card back.
+
+        Args:
+            card (Card): The card to display.
+        """
         self.card_label.setText(f"Back: {card.back}")
         self.is_front = False
 
     def notify(self, message: str) -> None:
-        """Notifies the user with a message."""
+        """Notifies the user with message.
+
+        Args:
+            message (str): The message to notify the user.
+        """
         QMessageBox.information(self.window, "Notification", message)
 
     def display_statistics(self, engine: CardEngine) -> None:
-        """Notifies the user of the global statistics."""
+        """Displays the statistics for the user.
+
+        Args:
+            engine (CardEngine): The engine relevant to the session.
+        """
         statistics = engine.aggregate_statistics()
         self.notify("\n".join(f"{key}: {val}" for key, val in statistics.items()))
 
     def run_session(self, engine: CardEngine) -> None:
-        """Launches the session."""
+        """Runs the session.
+
+        Args:
+            engine (CardEngine): The engine relevant to starting the session.
+        """
         self.engine = engine
         self.show_next_card()
         self.window.show()
