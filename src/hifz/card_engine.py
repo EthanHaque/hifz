@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from hifz import learning_strategies
 from hifz.dataserver import DataServer
 from hifz.learning_strategies import CardStrategy
 from hifz.models import Card, Feedback
