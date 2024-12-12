@@ -94,7 +94,7 @@ class CardStrategy(ABC):
         return f"{self.__class__.__name__}({state_details})"
 
 
-@register_strategy("RandomStrategy")
+@register_strategy("random")
 class RandomStrategy(CardStrategy):
     """This class offers a random ordering of the cards."""
 
@@ -130,7 +130,7 @@ class RandomStrategy(CardStrategy):
         return {"Correct": total_correct, "Incorrect": total_incorrect}
 
 
-@register_strategy("SequentialStrategy")
+@register_strategy("sequential")
 class SequentialStrategy(CardStrategy):
     """This class represents the logic associated with providing a sequential ordering of cards."""
 
@@ -170,7 +170,7 @@ class SequentialStrategy(CardStrategy):
         return global_statistics
 
 
-@register_strategy("MasteryStrategy")
+@register_strategy("mastery")
 class MasteryStrategy(CardStrategy):
     """This class maintains the logic associated with a card ordering for mastery learning."""
 
@@ -241,7 +241,7 @@ class MasteryStrategy(CardStrategy):
         return instance
 
 
-@register_strategy("SimpleSpacedRepetitionStrategy")
+@register_strategy("spaced_repetition")
 class SimpleSpacedRepetitionStrategy(CardStrategy):
     """This class implements a simple spaced repetition algorithm."""
 
@@ -326,7 +326,7 @@ class SimpleSpacedRepetitionStrategy(CardStrategy):
         return global_statistics
 
 
-@register_strategy("AlphabeticalStrategy")
+@register_strategy("alphabetical")
 class AlphabeticalStrategy(CardStrategy):
     """This class sorts cards by their front side."""
 

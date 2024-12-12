@@ -182,12 +182,12 @@ def test_engine_load_with_invalid_strategy(tmp_path_factory, utf8_test_file):
     engine.save_progress(save_file)
 
     save_data = save_file.read_text()
-    save_data = save_data.replace("SequentialStrategy", "NonExistentStrategy")
+    save_data = save_data.replace("sequential", "non_existent_strategy")
     save_file.write_text(save_data)
 
     new_engine = CardEngine(SequentialStrategy())
     with pytest.raises(
-        ValueError, match="Unsupported strategy type: NonExistentStrategy"
+        ValueError, match="Unsupported strategy type: non_existent_strategy"
     ):
         new_engine.load_progress(save_file)
 
