@@ -76,5 +76,5 @@ Here are some examples one can run the dummy data:
 python -m pip install -e .[gui,tui]
 python -m hifz cli random --source data/arabic_letters.json
 python -m hifz gui mastery --source data/fruits.csv
-python -m hifz gui mastery --source https://raw.githubusercontent.com/EthanHaque/hifz/refs/heads/main/data/fruits.csv
+python -m hifz tui spaced_repetition --source https://raw.githubusercontent.com/EthanHaque/hifz/refs/heads/main/data/fruits.csv
 ```
