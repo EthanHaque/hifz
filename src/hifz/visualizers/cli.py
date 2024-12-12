@@ -30,35 +30,43 @@ class CLICardInterface(CardInterface):
         match feedback:
             case BinaryFeedback():
                 field_name = feedback.field_name
-                try:
-                    value = input(f"{field_name}? (y/n): ").strip().lower()
-                    if value not in ["y", "yes", "true", "n", "no", "false"]:
-                        raise ValueError
-                except ValueError:
-                    print("Invalid choice. Please try again.")  # noqa: T201
-                    return self.get_user_feedback(feedback)
-                feedback.data[field_name] = value in ["y", "yes", "true"]
+                while True:
+                    try:
+                        value = input(f"{field_name}? (y/n): ").strip().lower()
+                        if value not in ["y", "yes", "true", "n", "no", "false"]:
+                            raise ValueError
+                    except ValueError:
+                        print("Invalid choice. Please try again.")  # noqa: T201
+
+                    else:
+                        feedback.data[field_name] = value in ["y", "yes", "true"]
+                        break
 
             case SingleSelectBooleanFeedback():
                 num_options = len(feedback.options)
                 print("Choose one of the following options:")  # noqa: T201
                 for idx, option in enumerate(feedback.options, 1):
                     print(f"{idx}: {option}")  # noqa: T201
-                try:
-                    choice = int(
-                        input("Enter the number corresponding to your choice: ").strip()
-                    )
-                    if 1 <= choice <= num_options:
-                        selected_option = feedback.options[choice - 1]
-                        feedback.data = {
-                            option: option == selected_option
-                            for option in feedback.options
-                        }
+
+                while True:
+                    try:
+                        choice = int(
+                            input(
+                                "Enter the number corresponding to your choice: "
+                            ).strip()
+                        )
+                        if 1 <= choice <= num_options:
+                            selected_option = feedback.options[choice - 1]
+                            feedback.data = {
+                                option: option == selected_option
+                                for option in feedback.options
+                            }
+                        else:
+                            raise ValueError
+                    except (ValueError, IndexError):
+                        print("Invalid choice. Please try again.")  # noqa: T201
                     else:
-                        raise ValueError
-                except (ValueError, IndexError):
-                    print("Invalid choice. Please try again.")  # noqa: T201
-                    return self.get_user_feedback(feedback)
+                        break
 
             case _:
                 msg = f"CLI does not support rendering feedback of type {type(feedback).__name__}."
