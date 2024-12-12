@@ -50,13 +50,14 @@ class CardEngine:
 
         Args:
             file_path (str): The file_path of the cards.
+            reverse (bool): Swap the front and the back of the cards.
 
         Returns:
             bool: Whether the retrieval was successful.
         """
         data_server = DataServer()
         try:
-            new_cards = data_server.read_entries(file_path, reverse=reverse)
+            new_cards = data_server.read_cards(file_path, reverse=reverse)
             self.session = CardSession(new_cards, self.strategy)
             return True
         except Exception:
