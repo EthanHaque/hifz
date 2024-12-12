@@ -180,3 +180,23 @@ def test_dataserver_card_reversal(utf8_test_file):
 
     assert Card("baa", "ب") in cards
     assert Card("kanji", "漢字") in cards
+
+
+def test_dataserver_reads_from_url(monkeypatch, mocker):
+    """Test that DataServer correctly reads data from a URL."""
+    mock_response = mocker.MagicMock()
+    mock_response.read.return_value = b"front,back\nHello,World\nTest,Card\n"
+
+    def mock_urlopen(url):
+        _ = url
+        return mock_response
+
+    monkeypatch.setattr("hifz.dataserver.urlopen", mock_urlopen)
+
+    server = DataServer()
+
+    test_url = "http://example.com/test.csv"
+    cards = server.read_entries(test_url)
+
+    assert Card("Hello", "World") in cards
+    assert Card("Test", "Card") in cards

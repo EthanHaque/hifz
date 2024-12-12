@@ -6,7 +6,6 @@ import tempfile
 import xml.dom.minidom as xml
 from abc import ABC, abstractmethod
 from pathlib import Path
-
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
