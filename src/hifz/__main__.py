@@ -39,9 +39,9 @@ def get_args() -> argparse.Namespace:
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
-        "--file-path",
+        "--source",
         type=str,
-        help="The file path of the desired card collection (e.g., .csv or .json).",
+        help="The source of the desired card collection, either a URL or a file path (e.g., .csv or .json).",
     )
     group.add_argument(
         "--resume",
@@ -94,7 +94,7 @@ def main() -> None:
     if args.resume:
         engine.load_progress(args.resume)
     else:
-        engine.load_cards(args.file_path, args.reverse)
+        engine.load_cards(args.source, args.reverse)
 
     visualizer.run_session(engine)
 
