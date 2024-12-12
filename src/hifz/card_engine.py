@@ -29,11 +29,11 @@ class CardEngine:
         """Gets the feedback type for the particular strategy used."""
         return self.session.strategy.create_feedback()
 
-    def load_cards(self, file_path: str) -> bool:
+    def load_cards(self, file_path: str, reverse: bool = False) -> bool:
         """Loads the cards at file_path to be interacted with."""
         data_server = DataServer()
         try:
-            new_cards = data_server.read_entries(file_path)
+            new_cards = data_server.read_entries(file_path, reverse=reverse)
             self.session = CardSession(new_cards, self.strategy)
             return True
         except Exception:

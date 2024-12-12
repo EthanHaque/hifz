@@ -171,3 +171,12 @@ def test_dataserver_unsupported_file_extension(tmp_path_factory):
 
     with pytest.raises(ValueError, match="Unsupported file extension: .unsupported"):
         server.read_entries(str(unsupported_file))
+
+
+def test_dataserver_card_reversal(utf8_test_file):
+    """Tests that card reversal works as expected."""
+    server = DataServer()
+    cards = server.read_entries(str(utf8_test_file), reverse=True)
+
+    assert Card("baa", "ب") in cards
+    assert Card("kanji", "漢字") in cards
