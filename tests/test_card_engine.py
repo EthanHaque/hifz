@@ -112,7 +112,7 @@ def test_engine_save_progress(tmp_path_factory, utf8_test_file):
     save_file = tmp_dir / "session.json"
 
     engine = CardEngine(SequentialStrategy())
-    engine.load_cards(utf8_test_file)
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
     assert save_file.exists(), "Progress file was not created."
@@ -125,7 +125,7 @@ def test_engine_load_progress(tmp_path_factory, utf8_test_file):
     save_file = tmp_dir / "session.json"
 
     engine = CardEngine(SequentialStrategy())
-    engine.load_cards(utf8_test_file)
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
     new_engine = CardEngine(SequentialStrategy())
@@ -145,7 +145,7 @@ def test_engine_save_and_load_with_random_strategy(tmp_path_factory, utf8_test_f
     save_file = tmp_dir / "session.json"
 
     engine = CardEngine(RandomStrategy())
-    engine.load_cards(utf8_test_file)
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
     new_engine = CardEngine(RandomStrategy())
@@ -161,7 +161,7 @@ def test_engine_save_and_load_with_mastery_strategy(tmp_path_factory, utf8_test_
     save_file = tmp_dir / "session.json"
 
     engine = CardEngine(MasteryStrategy(threshold=10))
-    engine.load_cards(utf8_test_file)
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
     new_engine = CardEngine(MasteryStrategy())
@@ -178,7 +178,7 @@ def test_engine_load_with_invalid_strategy(tmp_path_factory, utf8_test_file):
     save_file = tmp_dir / "session.json"
 
     engine = CardEngine(SequentialStrategy())
-    engine.load_cards(utf8_test_file)
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
     save_data = save_file.read_text()
@@ -212,7 +212,7 @@ def test_global_statistics(utf8_test_file):
 def test_spaced_repetition_serialization(utf8_test_file, tmp_path_factory):
     """Tests card seralization for the SSR strategy."""
     engine = CardEngine(SimpleSpacedRepetitionStrategy())
-    engine.load_cards(utf8_test_file)
+    engine.load_cards(str(utf8_test_file))
     for _ in range(5):
         card = engine.get_next_card()
         feedback = engine.get_feedback()
