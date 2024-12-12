@@ -1,11 +1,11 @@
 """This represents data models for the application."""
 
+import json
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
 from datetime import datetime
-import json
+from typing import Any
 
 
 @dataclass

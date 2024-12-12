@@ -7,7 +7,6 @@ from hifz.learning_strategies import (
     SequentialStrategy,
     SimpleSpacedRepetitionStrategy,
 )
-from pathlib import Path
 
 
 def test_load_cards(utf8_test_file):
