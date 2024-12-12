@@ -1,10 +1,8 @@
 """This represents data models for the application."""
 
-import json
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime
 from typing import Any
 
 
@@ -127,13 +125,3 @@ class Card:
         card = cls(front=data["front"], back=data["back"])
         card.statistics.data = data.get("statistics", {})
         return card
-
-
-class CardEncoder(json.JSONEncoder):
-    """This class helps encode non-serializable data."""
-
-    def default(self, o):
-        """Convert non-serializable objects to a serializable format."""
-        if isinstance(o, datetime):
-            return o.isoformat()
-        return super().default(o)
