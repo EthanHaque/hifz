@@ -40,12 +40,12 @@ def get_args() -> argparse.Namespace:
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "--file-path",
-        type=Path,
+        type=str,
         help="The file path of the desired card collection (e.g., .csv or .json).",
     )
     group.add_argument(
         "--resume",
-        type=Path,
+        type=str,
         help="Path to a saved session file to resume progress.",
     )
 
