@@ -1,7 +1,12 @@
 import pytest
 
 from hifz.card_engine import CardEngine
-from hifz.learning_strategies import MasteryStrategy, RandomStrategy, SequentialStrategy
+from hifz.learning_strategies import (
+    MasteryStrategy,
+    RandomStrategy,
+    SequentialStrategy,
+    SimpleSpacedRepetitionStrategy,
+)
 
 
 def test_load_cards(utf8_test_file):
@@ -202,3 +207,18 @@ def test_global_statistics(utf8_test_file):
         feedback.data["correct"] = False
         engine.process_feedback(card, feedback)
     assert engine.session.aggregate_statistics() == {"Correct": 5, "Incorrect": 3}
+
+
+def test_spaced_repetition_serialization(utf8_test_file, tmp_path_factory):
+    """Tests card seralization for the SSR strategy."""
+    engine = CardEngine(SimpleSpacedRepetitionStrategy())
+    engine.load_cards(utf8_test_file)
+    for _ in range(5):
+        card = engine.get_next_card()
+        feedback = engine.get_feedback()
+        feedback.data["correct"] = True
+        engine.process_feedback(card, feedback)
+
+    output_path = tmp_path_factory.mktemp("saves") / "save.json"
+    engine.save_progress(output_path)
+    engine.load_progress(output_path)
