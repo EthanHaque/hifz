@@ -24,3 +24,5 @@ repos:
       - id: mypy
         files: src
         args: []
+        additional_dependencies:
+          - textual

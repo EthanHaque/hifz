@@ -29,7 +29,7 @@ class CardSession:
         data = {
             "metadata": {
                 "version": "1.0",
-                "timestamp": datetime.now().isoformat() + "Z",
+                "timestamp": datetime.now().isoformat(),
             },
             "session": {
                 "strategy": {
@@ -39,7 +39,7 @@ class CardSession:
             },
         }
         with file_path.open("w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4)
+            json.dump(data, f, indent=4, cls=SessionEncoder)
 
     @classmethod
     def load_progress(cls, file_path: Path) -> "CardSession":
@@ -87,3 +87,31 @@ class CardSession:
             f"Strategy:\n{strategy_details}\n\n"
             f"Cards:\n{card_details}"
         )
+
+
+class SessionEncoder(json.JSONEncoder):
+    """This class helps encode non-serializable data."""
+
+    def default(self, o):
+        """Convert non-serializable objects to a serializable format."""
+        if isinstance(o, datetime):
+            return o.isoformat()
+        return super().default(o)
+
+
+class SessionDecoder(json.JSONDecoder):
+    """This class helps decode serialized data back into their original objects."""
+
+    def __init__(self, *args, **kargs) -> None:
+        """Initalizes the object."""
+        super().__init__(object_hook=self.obj_hook, *args, **kargs)  # noqa: B026
+
+    def obj_hook(self, obj):
+        """Convert serialized objects back into their original format."""
+        if "timestamp" in obj:
+            obj["timestamp"] = datetime.fromisoformat(obj["timestamp"])
+        if "cards" in obj:
+            for card in obj["cards"]:
+                if "due" in card:
+                    card["due"] = datetime.fromisoformat(card["due"])
+        return obj

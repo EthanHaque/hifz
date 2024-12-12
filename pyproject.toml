@@ -22,6 +22,9 @@ docs = [
     "myst_parser >=0.13",  # Markdown
     "sphinx_copybutton",  # Easy code copy button
 ]
+tui = [
+    "textual>=0.83.0",
+]
 
 [build-system]
 requires = ["setuptools", "wheel"]
@@ -53,7 +56,11 @@ enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
 warn_unreachable = true
 disallow_untyped_defs = false
 disallow_incomplete_defs = false
+exclude = "src/hifz/visualizers/gui.py"
 
+[[tool.mypy.overrides]]
+module = "PyQt6.*"
+ignore_missing_imports = true
 
 [tool.ruff.lint]
 extend-select = [

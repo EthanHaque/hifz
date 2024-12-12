@@ -17,7 +17,9 @@ def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="A flashcard memorization program.")
 
     parser.add_argument(
-        "visualizer", choices=["cli", "gui"], help="The type of visualizer to use."
+        "visualizer",
+        choices=["cli", "gui", "tui"],
+        help="The type of visualizer to use.",
     )
     parser.add_argument(
         "strategy",
@@ -27,6 +29,11 @@ def get_args() -> argparse.Namespace:
     parser.add_argument(
         "--save",
         type=Path,
+        help="Optional: Path to save progress after the session ends.",
+    )
+    parser.add_argument(
+        "--reverse",
+        action="store_true",
         help="Optional: Path to save progress after the session ends.",
     )
 
@@ -65,6 +72,12 @@ def get_visualizer(visualizer: str) -> Visualizer:
             except ImportError as e:
                 raise e
             return GUIVisualizer()
+        case "tui":
+            try:
+                from hifz.visualizers.tui import TUIVisualizer
+            except ImportError as e:
+                raise e
+            return TUIVisualizer()
         case _:
             error_message = f"{visualizer} is not a valid visualizer"
             raise ValueError(error_message)
@@ -81,7 +94,7 @@ def main() -> None:
     if args.resume:
         engine.load_progress(args.resume)
     else:
-        engine.load_cards(args.file_path)
+        engine.load_cards(args.file_path, args.reverse)
 
     visualizer.run_session(engine)
 
