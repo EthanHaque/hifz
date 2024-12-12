@@ -186,7 +186,7 @@ def test_global_statistics(utf8_test_file):
         feedback = engine.get_feedback()
         feedback.data["correct"] = False
         engine.process_feedback(card, feedback)
-    assert engine.session.aggregate_statistics() == {"Correct": 5, "Incorrect": 3}
+    assert engine.session.get_statistics() == {"Correct": 5, "Incorrect": 3}
 
 
 def test_spaced_repetition_serialization(utf8_test_file, tmp_path_factory):
