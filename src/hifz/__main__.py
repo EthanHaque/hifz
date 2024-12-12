@@ -90,11 +90,11 @@ def main() -> None:
     strategy = get_strategy(args.strategy)
     visualizer = get_visualizer(args.visualizer)
 
-    engine = CardEngine()
+    engine = CardEngine(strategy)
     if args.resume:
         engine.load_progress(args.resume)
     else:
-        engine.load_cards(args.source, strategy, reverse=args.reverse)
+        engine.load_cards(args.source, args.reverse)
 
     visualizer.run_session(engine)
 

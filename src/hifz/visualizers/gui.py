@@ -201,7 +201,7 @@ class GUIVisualizer(Visualizer):
         new_file_path = QFileDialog.getOpenFileName(
             self.window, "Open File", "{$HOME}"
         )[0]
-        if self.engine.load_cards(new_file_path, self.engine.session.strategy):
+        if self.engine.load_cards(new_file_path):
             self.notify("Cards reloaded successfully.")
         else:
             self.notify("Failed to reload cards.")

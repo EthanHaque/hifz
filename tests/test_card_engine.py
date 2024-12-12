@@ -22,8 +22,8 @@ def test_load_cards(utf8_test_file):
         - load_cards() returns True if cards were successfully loaded
         - The number of cards currently loaded is 2
     """
-    engine = CardEngine()
-    assert engine.load_cards(str(utf8_test_file), SequentialStrategy()) is True
+    engine = CardEngine(SequentialStrategy())
+    assert engine.load_cards(str(utf8_test_file)) is True
     assert len(engine.session.cards) == 2
 
 
@@ -39,8 +39,8 @@ def test_get_next_card(utf8_test_file):
     Asserts:
         - The 'front' field of the first card matches the expected Arabic character, ب.
     """
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), SequentialStrategy())
+    engine = CardEngine(SequentialStrategy())
+    engine.load_cards(str(utf8_test_file))
     card = engine.get_next_card()
     assert card.front == "ب"
 
@@ -57,8 +57,8 @@ def test_process_feedback(utf8_test_file):
     Asserts:
         - The correct_guesses count for the card is incremented to 1.
     """
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), SequentialStrategy())
+    engine = CardEngine(SequentialStrategy())
+    engine.load_cards(str(utf8_test_file))
     card = engine.get_next_card()
 
     feedback = engine.get_feedback()
@@ -80,10 +80,10 @@ def test_engine_unsupported_file_extension(tmp_path_factory):
     Asserts:
         - load_cards() returns False when attempting to load an unsupported file type.
     """
-    engine = CardEngine()
+    engine = CardEngine(RandomStrategy())
     unsupported_file = tmp_path_factory.mktemp("data") / "unsupported.unsupported"
     unsupported_file.write_text("This is an unsupported file.")
-    assert engine.load_cards(str(unsupported_file), RandomStrategy()) is False
+    assert engine.load_cards(str(unsupported_file)) is False
 
 
 def test_engine_save_progress(tmp_path_factory, utf8_test_file):
@@ -91,8 +91,8 @@ def test_engine_save_progress(tmp_path_factory, utf8_test_file):
     tmp_dir = tmp_path_factory.mktemp("session_data")
     save_file = tmp_dir / "session.json"
 
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), SequentialStrategy())
+    engine = CardEngine(SequentialStrategy())
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
     assert save_file.exists(), "Progress file was not created."
@@ -104,11 +104,11 @@ def test_engine_load_progress(tmp_path_factory, utf8_test_file):
     tmp_dir = tmp_path_factory.mktemp("session_data")
     save_file = tmp_dir / "session.json"
 
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), SequentialStrategy())
+    engine = CardEngine(SequentialStrategy())
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
-    new_engine = CardEngine()
+    new_engine = CardEngine(SequentialStrategy())
     new_engine.load_progress(save_file)
 
     assert len(new_engine.session.cards) == len(engine.session.cards)
@@ -124,11 +124,11 @@ def test_engine_save_and_load_with_random_strategy(tmp_path_factory, utf8_test_f
     tmp_dir = tmp_path_factory.mktemp("session_data")
     save_file = tmp_dir / "session.json"
 
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), RandomStrategy())
+    engine = CardEngine(RandomStrategy())
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
-    new_engine = CardEngine()
+    new_engine = CardEngine(RandomStrategy())
     new_engine.load_progress(save_file)
 
     assert isinstance(new_engine.strategy, RandomStrategy)
@@ -140,11 +140,11 @@ def test_engine_save_and_load_with_mastery_strategy(tmp_path_factory, utf8_test_
     tmp_dir = tmp_path_factory.mktemp("session_data")
     save_file = tmp_dir / "session.json"
 
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), MasteryStrategy(threshold=10))
+    engine = CardEngine(MasteryStrategy(threshold=10))
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
-    new_engine = CardEngine()
+    new_engine = CardEngine(MasteryStrategy())
     new_engine.load_progress(save_file)
 
     assert isinstance(new_engine.strategy, MasteryStrategy)
@@ -157,15 +157,15 @@ def test_engine_load_with_invalid_strategy(tmp_path_factory, utf8_test_file):
     tmp_dir = tmp_path_factory.mktemp("session_data")
     save_file = tmp_dir / "session.json"
 
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), SequentialStrategy())
+    engine = CardEngine(SequentialStrategy())
+    engine.load_cards(str(utf8_test_file))
     engine.save_progress(save_file)
 
     save_data = save_file.read_text()
     save_data = save_data.replace("sequential", "non_existent_strategy")
     save_file.write_text(save_data)
 
-    new_engine = CardEngine()
+    new_engine = CardEngine(SequentialStrategy())
     with pytest.raises(
         ValueError, match="Unsupported strategy type: non_existent_strategy"
     ):
@@ -174,8 +174,8 @@ def test_engine_load_with_invalid_strategy(tmp_path_factory, utf8_test_file):
 
 def test_global_statistics(utf8_test_file):
     """Test global session statistics."""
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), RandomStrategy())
+    engine = CardEngine(RandomStrategy())
+    engine.load_cards(str(utf8_test_file))
     for _ in range(5):
         card = engine.get_next_card()
         feedback = engine.get_feedback()
@@ -191,8 +191,8 @@ def test_global_statistics(utf8_test_file):
 
 def test_spaced_repetition_serialization(utf8_test_file, tmp_path_factory):
     """Tests card seralization for the SSR strategy."""
-    engine = CardEngine()
-    engine.load_cards(str(utf8_test_file), SimpleSpacedRepetitionStrategy())
+    engine = CardEngine(SimpleSpacedRepetitionStrategy())
+    engine.load_cards(str(utf8_test_file))
     for _ in range(5):
         card = engine.get_next_card()
         feedback = engine.get_feedback()
