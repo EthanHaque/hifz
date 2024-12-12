@@ -234,10 +234,10 @@ class MasteryStrategy(CardStrategy):
         return {"index": self.index, "threshold": self.threshold}
 
     @classmethod
-    def _deserialize_state(cls, data: dict[str, Any]) -> "MasteryStrategy":
+    def _deserialize_state(cls, state: dict[str, Any]) -> "MasteryStrategy":
         """Restores the strategy state."""
-        instance = cls(threshold=data.get("threshold", 5))
-        instance.index = data.get("index", 0)
+        instance = cls(threshold=state.get("threshold", 5))
+        instance.index = state.get("index", 0)
         return instance
 
 
