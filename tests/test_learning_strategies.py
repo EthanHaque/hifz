@@ -302,7 +302,7 @@ def test_mastery_strategy_serialization():
 
     serialized = mastery_strategy.to_dict()
     assert serialized == {
-        "type": "MasteryStrategy",
+        "type": "mastery",
         "state": {
             "index": 3,
             "threshold": 10,

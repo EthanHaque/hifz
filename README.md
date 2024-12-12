@@ -73,7 +73,7 @@ uv run src/hifz -h
 
 Here are some examples one can run the dummy data:
 ```bash
-uv pip install -e .[gui]
-uv run src/hifz cli RandomStrategy --file-path data/arabic_letters.json
-uv run src/hifz gui MasterStrategy --file-path data/fruits.csv
+uv pip install -e .[gui,tui]
+uv run src/hifz cli random --file-path data/arabic_letters.json
+uv run src/hifz gui mastery --file-path data/fruits.csv
 ```
