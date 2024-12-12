@@ -186,11 +186,13 @@ class SequentialStrategy(CardStrategy):
         return BinaryFeedback("correct")
 
     def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
-        """Placeholder."""
-        global_statistics = {}
+        """Computes total number of correct and incorrect."""
+        total_correct = 0
+        total_incorrect = 0
         for card in cards:
-            global_statistics[card.front] = card.statistics
-        return global_statistics
+            total_correct += card.statistics.get(key="correct", default=0)
+            total_incorrect += card.statistics.get(key="incorrect", default=0)
+        return {"Correct": total_correct, "Incorrect": total_incorrect}
 
 
 @register_strategy("mastery")
@@ -251,11 +253,13 @@ class MasteryStrategy(CardStrategy):
         return BinaryFeedback("correct")
 
     def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
-        """Placeholder."""
-        global_statistics = {}
+        """Computes total number of correct and incorrect."""
+        total_correct = 0
+        total_incorrect = 0
         for card in cards:
-            global_statistics[card.front] = card.statistics
-        return global_statistics
+            total_correct += card.statistics.get(key="correct", default=0)
+            total_incorrect += card.statistics.get(key="incorrect", default=0)
+        return {"Correct": total_correct, "Incorrect": total_incorrect}
 
     def _serialize_state(self) -> dict[str, Any]:
         """Serializes the strategy state."""
@@ -347,11 +351,13 @@ class SimpleSpacedRepetitionStrategy(CardStrategy):
         return BinaryFeedback("correct")
 
     def aggregate_statistics(self, cards: list[Card]) -> dict[str, Any]:
-        """Placeholder."""
-        global_statistics = {}
+        """Computes total number of correct and incorrect."""
+        total_correct = 0
+        total_incorrect = 0
         for card in cards:
-            global_statistics[card.front] = card.statistics
-        return global_statistics
+            total_correct += card.statistics.get(key="correct", default=0)
+            total_incorrect += card.statistics.get(key="incorrect", default=0)
+        return {"Correct": total_correct, "Incorrect": total_incorrect}
 
 
 @register_strategy("alphabetical")
