@@ -119,7 +119,7 @@ class CLIVisualizer(Visualizer):
 
             if action == "reload":
                 new_file_path = input("Enter the new file path: ")
-                if engine.load_cards(new_file_path):
+                if engine.load_cards(new_file_path, engine.session.strategy):
                     self.notify(f"Successfully loaded new cards from {new_file_path}")
                 else:
                     self.notify(f"Failed to load new cards from {new_file_path}")

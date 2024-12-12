@@ -14,8 +14,6 @@ from hifz.utils import CardSession
 class CardEngine:
     """This class is responsible for running the main Hifz program."""
 
-    strategy: CardStrategy
-
     def __post_init__(self) -> None:
         """Instantiates the CardEngine."""
         self.session: CardSession
@@ -45,12 +43,15 @@ class CardEngine:
         """
         return self.session.strategy.create_feedback()
 
-    def load_cards(self, file_path: str, reverse: bool = False) -> bool:
+    def load_cards(
+        self, file_path: str, learning_strategy: CardStrategy, reverse: bool = False
+    ) -> bool:
         """Loads the cards at file_path to be interacted with.
 
         Args:
             file_path (str): The file_path of the cards.
             reverse (bool): Swap the front and the back of the cards.
+            learning_strategy (CardStrategy): The ordering algorithm to use.
 
         Returns:
             bool: Whether the retrieval was successful.
@@ -58,7 +59,7 @@ class CardEngine:
         data_server = DataServer()
         try:
             new_cards = data_server.read_cards(file_path, reverse=reverse)
-            self.session = CardSession(new_cards, self.strategy)
+            self.session = CardSession(new_cards, learning_strategy)
             return True
         except Exception:
             return False
