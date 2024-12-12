@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A flashcard application."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["requests",]
+dependencies = []
 
 
 [project.optional-dependencies]
@@ -12,7 +12,6 @@ test = [
     "pytest-mock>=3.14.0",
     "pytest>=8.3.3",
     "coverage>=7.6.3",
-    "types-requests",
 ]
 gui = [
     "pyqt6>=6.7.1",
@@ -60,7 +59,7 @@ disallow_incomplete_defs = false
 exclude = "src/hifz/visualizers/gui.py"
 
 [[tool.mypy.overrides]]
-module = "PyQt6.*,requests.*"
+module = "PyQt6.*"
 ignore_missing_imports = true
 
 [tool.ruff.lint]
