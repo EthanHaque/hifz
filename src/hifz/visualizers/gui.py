@@ -51,20 +51,6 @@ class GUIVisualizer(Visualizer):
         self.current_card: Card
         self.is_front = True
 
-    def render_feedback(self, feedback: Feedback) -> None:
-        """Renders feedback UI dynamically based on feedback structure."""
-        self.clear_buttons()
-        self.create_feedback_buttons(feedback)
-
-    def clear_buttons(self) -> None:
-        """Clears all buttons except the static card label."""
-        while self.layout.count() > 1:  # Keep only the card label
-            item = self.layout.takeAt(1)
-            if item is not None:
-                widget = item.widget()
-                if widget is not None:
-                    widget.deleteLater()
-
     def create_feedback_buttons(self, feedback: Feedback) -> None:
         """Creates and adds buttons dynamically based on feedback type."""
         match feedback:
@@ -75,8 +61,6 @@ class GUIVisualizer(Visualizer):
             case _:
                 msg = f"GUI does not support rendering feedback of type {type(feedback).__name__}."
                 raise NotImplementedError(msg)
-
-        self.add_navigation_buttons()
 
     def add_binary_feedback_buttons(self, feedback: BinaryFeedback) -> None:
         """Adds buttons for binary feedback options."""
@@ -177,6 +161,8 @@ class GUIVisualizer(Visualizer):
             engine (CardEngine): The engine relevant to starting the session.
         """
         self.engine = engine
+        feedback = self.engine.get_feedback()
+        self.create_feedback_buttons(feedback)
         self.show_next_card()
         self.window.show()
         self.app.exec()
@@ -186,8 +172,6 @@ class GUIVisualizer(Visualizer):
         """Displays the next card."""
         self.current_card = self.engine.get_next_card()
         self.display_card_front(self.current_card)
-        feedback = self.engine.get_feedback()
-        self.render_feedback(feedback)
 
     def flip_card(self) -> None:
         """Flips the card."""
