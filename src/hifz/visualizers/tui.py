@@ -54,8 +54,8 @@ class CardApp(App[None]):
     BINDINGS = [
         ("j", "flip_card", "Flip Card"),
         ("k", "flip_card", "Flip Card"),
-        ("u", "record_correct", "Correct"),
-        ("i", "record_incorrect", "Incorrect"),
+        ("y", "record_correct", "Correct"),
+        ("n", "record_incorrect", "Incorrect"),
     ]
 
     def __init__(self, engine: CardEngine, **kwargs) -> None:
